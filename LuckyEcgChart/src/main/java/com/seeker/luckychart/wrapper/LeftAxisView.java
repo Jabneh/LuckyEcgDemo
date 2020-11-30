@@ -18,16 +18,16 @@ import com.seeker.luckychart.utils.ChartUtils;
 /**
  * @author Seeker
  * @date 2018/6/29/029  13:17
- * @describe 绘制坐标的控件,针对横向滑动
+ * @describe 绘制坐标的控件, 针对横向滑动
  */
 @SuppressLint("ViewConstructor")
-public class LeftAxisView extends View{
+public class LeftAxisView extends View {
 
     private ChartProvider provider;
 
     private ChartAxis leftAxis;
 
-    private  char[] drawed;
+    private char[] drawed;
 
     private Rect dataContent;
 
@@ -43,7 +43,7 @@ public class LeftAxisView extends View{
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         setMeasuredDimension((int) (provider.getChartComputator().getDataContentRect().left
-                        +provider.getChartData().getLeftAxis().getLineMajorPaint().getStrokeWidth()/2f),-1);
+                + provider.getChartData().getLeftAxis().getLineMajorPaint().getStrokeWidth() / 2f), -1);
     }
 
     @Override
@@ -59,26 +59,26 @@ public class LeftAxisView extends View{
     /**
      * 绘制刻度值
      */
-    private void drawAxisCoor(Canvas canvas){
+    private void drawAxisCoor(Canvas canvas) {
         canvas.save();
         final CoorValue[] coorValues = leftAxis.getCoordinateValues();
         float cooX = leftAxis.getCoorBaseLine();
         final Paint coorPaint = leftAxis.getCoorPaint();
-        float realX,realY;
-        for (int i = 0,len = coorValues.length;i<len;++i){
-            if (i % leftAxis.getModule() == 0){
+        float realX, realY;
+        for (int i = 0, len = coorValues.length; i < len; ++i) {
+            if (i % leftAxis.getModule() == 0) {
                 CoorValue coorValue = coorValues[i];
-                ChartUtils.copyof(coorValue.getLabelAsChar(),drawed);
-                if (i == 0){
+                ChartUtils.copyof(coorValue.getLabelAsChar(), drawed);
+                if (i == 0) {
                     realY = (int) (coorValue.getRawValue() - leftAxis.getCoorHeight());
-                }else {
+                } else {
                     realY = (int) (coorValue.getRawValue() - leftAxis.getCoorHeight() / 2f);
                 }
-                realX = (int) (cooX - ChartUtils.measureText(drawed,coorPaint));
-                if (coorValue.getRawValue() >= dataContent.top-ChartUtils.CONTAIN_OFFSET
-                        && coorValue.getRawValue() <= dataContent.bottom+ChartUtils.CONTAIN_OFFSET){
-                    Bitmap bitmap = ChartUtils.drawBitmapText(drawed,0,drawed.length,coorPaint);
-                    canvas.drawBitmap(bitmap,realX,realY,null);
+                realX = (int) (cooX - ChartUtils.measureText(drawed, coorPaint));
+                if (coorValue.getRawValue() >= dataContent.top - ChartUtils.CONTAIN_OFFSET
+                        && coorValue.getRawValue() <= dataContent.bottom + ChartUtils.CONTAIN_OFFSET) {
+                    Bitmap bitmap = ChartUtils.drawBitmapText(drawed, 0, drawed.length, coorPaint);
+                    canvas.drawBitmap(bitmap, realX, realY, null);
                     bitmap.recycle();
                 }
             }
@@ -86,9 +86,9 @@ public class LeftAxisView extends View{
         canvas.restore();
     }
 
-    private void drawMajorLine(Canvas canvas){
+    private void drawMajorLine(Canvas canvas) {
         canvas.save();
-        canvas.drawLine(leftAxis.getSeparationLine(),dataContent.bottom,leftAxis.getSeparationLine(),dataContent.top,leftAxis.getLineMajorPaint());
+        canvas.drawLine(leftAxis.getSeparationLine(), dataContent.bottom, leftAxis.getSeparationLine(), dataContent.top, leftAxis.getLineMajorPaint());
         canvas.restore();
     }
 }

@@ -10,13 +10,8 @@ package com.seeker.luckychart.provider;
 public interface DataProvider<Container> extends AxisProvider {
 
     /**
-     * 设置一个数据容器，替换以前的
-     * @param container
-     */
-    void setDataContainer(Container... container);
-
-    /**
      * 判断是否包含当前数据容器
+     *
      * @param container
      * @return
      */
@@ -24,9 +19,17 @@ public interface DataProvider<Container> extends AxisProvider {
 
     /**
      * 返回数据容器
+     *
      * @return
      */
     Container[] getDataContainer();
+
+    /**
+     * 设置一个数据容器，替换以前的
+     *
+     * @param container
+     */
+    void setDataContainer(Container... container);
 
     /**
      * 清除数据

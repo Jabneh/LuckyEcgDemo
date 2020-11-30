@@ -11,7 +11,7 @@ public class LuckySoftStrategy implements SoftStrategy {
 
     private float maxDataValueForMv;//默认每行所表示的上下最大毫伏数 (maxDataValueForMv,-maxDataValueForMv)
 
-    public LuckySoftStrategy(int pointCount){
+    public LuckySoftStrategy(int pointCount) {
         this.pointCount = pointCount;
         this.maxDataValueForMv = 1.5f;
     }
@@ -28,11 +28,11 @@ public class LuckySoftStrategy implements SoftStrategy {
 
     @Override
     public int gridCountPerRow() {
-        if (maxDataValueForMv > 2f){
+        if (maxDataValueForMv > 2f) {
             return 10;
-        }else if (maxDataValueForMv > 1.5f){
+        } else if (maxDataValueForMv > 1.5f) {
             return 8;
-        }else {
+        } else {
             return 6;
         }
     }
@@ -69,7 +69,7 @@ public class LuckySoftStrategy implements SoftStrategy {
 
     @Override
     public int totalRows() {
-        return pointCount%pointsPerRow() == 0?pointCount/pointsPerRow():pointCount/pointsPerRow()+1;//总共12行，2分钟数据
+        return pointCount % pointsPerRow() == 0 ? pointCount / pointsPerRow() : pointCount / pointsPerRow() + 1;//总共12行，2分钟数据
     }
 
     @Override
@@ -94,7 +94,8 @@ public class LuckySoftStrategy implements SoftStrategy {
 
     @Override
     public Transformer getTransformer() {
-        return new Transformer() {};
+        return new Transformer() {
+        };
     }
 
     public void setMaxDataValueForMv(float maxDataValueForMv) {

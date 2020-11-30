@@ -8,21 +8,20 @@ import com.seeker.luckychart.model.container.PointContainer;
  * @describe 散点绘制数据
  */
 
-public class ScatterChartData extends AbsChartData<PointContainer>{
+public class ScatterChartData extends AbsChartData<PointContainer> {
 
     private ScatterChartData() {
-
     }
 
     private ScatterChartData(PointContainer container) {
         super(container);
     }
 
-    public static ScatterChartData create(){
+    public static ScatterChartData create() {
         return new ScatterChartData();
     }
 
-    public static ScatterChartData create(PointContainer container){
+    public static ScatterChartData create(PointContainer container) {
         return new ScatterChartData(container);
     }
 

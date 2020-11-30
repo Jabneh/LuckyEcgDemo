@@ -21,13 +21,13 @@ import java.util.Stack;
  * @describe 散点图绘制渲染器
  */
 
-public class ScatterChartDataRenderer extends AbstractChartDataRenderer<ScatterChartData>{
+public class ScatterChartDataRenderer extends AbstractChartDataRenderer<ScatterChartData> {
 
-    private ScatterChartDataRenderer(ChartProvider<ScatterChartData> provider){
+    private ScatterChartDataRenderer(ChartProvider<ScatterChartData> provider) {
         super(provider);
     }
 
-    public static ScatterChartDataRenderer create(ChartProvider<ScatterChartData> provider){
+    public static ScatterChartDataRenderer create(ChartProvider<ScatterChartData> provider) {
         return new ScatterChartDataRenderer(provider);
     }
 
@@ -48,30 +48,30 @@ public class ScatterChartDataRenderer extends AbstractChartDataRenderer<ScatterC
 
     @Override
     public void onDataRender() {
-        if (checkDataAvailable()){
+        if (checkDataAvailable()) {
             ScatterChartData chartData = chartProvider.getChartData();
             PointContainer container = chartData.getDataContainer()[0];
             final PointValue[] values = container.getValues();
-            if (values == null){
+            if (values == null) {
                 return;
             }
-            drawPoint(values,container.getPointColor(),container.getPointRadius());
+            drawPoint(values, container.getPointColor(), container.getPointRadius());
         }
     }
 
-    private void drawPoint(PointValue[] values,int color,float radius){
-        float rawX,rawY;
+    private void drawPoint(PointValue[] values, int color, float radius) {
+        float rawX, rawY;
         final Coordinateport visible = chartComputator.getVisibleCoorport();
         Stack<Vector3> points = new Stack<>();
-        for (PointValue value:values){
-            if (visible.contains(value.getCoorX(),value.getCoorY())) {
+        for (PointValue value : values) {
+            if (visible.contains(value.getCoorX(), value.getCoorY())) {
                 rawX = chartComputator.computeRawX(value.getCoorX());
                 rawY = chartComputator.computeRawY(value.getCoorY());
-                PointF pointF = chartComputator.screenToCartesian(rawX,rawY);
-                points.add(new Vector3(pointF.x,pointF.y,0));
+                PointF pointF = chartComputator.screenToCartesian(rawX, rawY);
+                points.add(new Vector3(pointF.x, pointF.y, 0));
             }
         }
-        Line3D whirl = new Line3D(points,radius,color);
+        Line3D whirl = new Line3D(points, radius, color);
         whirl.setDrawingMode(GLES31.GL_POINTS);
         Material material = new Material();
         whirl.setMaterial(material);

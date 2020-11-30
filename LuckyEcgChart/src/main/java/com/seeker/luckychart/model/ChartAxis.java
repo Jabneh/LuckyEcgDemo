@@ -24,11 +24,7 @@ public class ChartAxis {
     public static final int RIGHT = 0x03;//暂未做适配工作
     public static final int BOTTOM = 0x04;
 
-    @IntDef({LEFT,TOP,RIGHT,BOTTOM})
-    @Retention(RetentionPolicy.SOURCE)
-    public @interface Location{
-
-    }
+    private int coorTextAscent, nameTextAscent;
 
     private float axisMargin = DEFAULT_AXIS_MARGIN_DP;//刻度与绘图区域的间隔
 
@@ -52,10 +48,27 @@ public class ChartAxis {
      * 绘制刻度间隔,如刻度为0,1,2,3,4 module = 1,则全部绘制， = 2，则为0,2,4
      */
     private int module = 1;
+    private int coorTextDescent, nameTextDescent;
 
-    private int coorTextAscent,nameTextAscent;
+    public void initFontMetricsInt() {
+        if (coorPaint == null) {
+            throw new NullPointerException("have you set draw coor paint?");
+        }
+        coorPaint.getFontMetrics(fontMetrics);
+        coorTextAscent = (int) Math.abs(fontMetrics.ascent);
+        coorTextDescent = (int) Math.abs(fontMetrics.descent);
+        coorWidth = (int) coorPaint.measureText(ChartUtils.VALUEWIDTHCHARS, 0, maxCoorchars);
+        coorHeight = (int) Math.floor(fontMetrics.descent - fontMetrics.ascent);
+        coorTextTop = (int) fontMetrics.top;
+        coorTextBottom = (int) fontMetrics.bottom;
 
-    private int coorTextDescent,nameTextDescent;
+        if (namePaint != null) {
+            namePaint.getFontMetrics(fontMetrics);
+            nameTextAscent = (int) Math.abs(fontMetrics.ascent);
+            nameTextDescent = (int) Math.abs(fontMetrics.descent);
+        }
+
+    }
 
     private int coorTextBottom;
 
@@ -73,23 +86,9 @@ public class ChartAxis {
 
     private float separationLine;
 
-    public void initFontMetricsInt(){
-        if (coorPaint == null){
-            throw new NullPointerException("have you set draw coor paint?");
-        }
-        coorPaint.getFontMetrics(fontMetrics);
-        coorTextAscent = (int) Math.abs(fontMetrics.ascent);
-        coorTextDescent = (int) Math.abs(fontMetrics.descent);
-        coorWidth = (int) coorPaint.measureText(ChartUtils.VALUEWIDTHCHARS,0,maxCoorchars);
-        coorHeight = (int) Math.floor(fontMetrics.descent - fontMetrics.ascent);
-        coorTextTop = (int) fontMetrics.top;
-        coorTextBottom = (int) fontMetrics.bottom;
-
-        if (namePaint != null){
-            namePaint.getFontMetrics(fontMetrics);
-            nameTextAscent = (int) Math.abs(fontMetrics.ascent);
-            nameTextDescent = (int) Math.abs(fontMetrics.descent);
-        }
+    @IntDef({LEFT, TOP, RIGHT, BOTTOM})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface Location {
 
     }
 

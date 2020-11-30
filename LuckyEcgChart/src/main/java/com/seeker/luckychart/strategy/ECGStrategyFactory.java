@@ -8,7 +8,6 @@ import com.seeker.luckychart.strategy.ecgrender.ECGRenderStrategy;
 import com.seeker.luckychart.strategy.ecgrender.ECGRenderStrategyImpl;
 import com.seeker.luckychart.strategy.press.ECGLongPressImpl;
 import com.seeker.luckychart.strategy.press.LongPress;
-import com.seeker.luckychart.strategy.scale.DefaultScaler;
 import com.seeker.luckychart.strategy.scale.Scaler;
 import com.seeker.luckychart.strategy.scroll.ECGScrollerImpl;
 import com.seeker.luckychart.strategy.scroll.Scroller;
@@ -18,7 +17,7 @@ import com.seeker.luckychart.strategy.scroll.Scroller;
  * @date 2018/11/3/003  10:16
  * @describe ecg心电图手势相关策略生成工厂
  */
-public class ECGStrategyFactory implements GestureProvider{
+public class ECGStrategyFactory implements GestureProvider {
 
     private DoubleTap doubleTap;
 
@@ -30,16 +29,16 @@ public class ECGStrategyFactory implements GestureProvider{
 
     private ChartProvider chartProvider;
 
-    private ECGStrategyFactory(ChartProvider provider){
+    private ECGStrategyFactory(ChartProvider provider) {
         this.chartProvider = provider;
         initStrategies();
     }
 
-    public static ECGStrategyFactory create(ChartProvider chartProvider){
+    public static ECGStrategyFactory create(ChartProvider chartProvider) {
         return new ECGStrategyFactory(chartProvider);
     }
 
-    private void initStrategies(){
+    private void initStrategies() {
         doubleTap = ECGDoubleTabImpl.create(chartProvider);
         scroller = ECGScrollerImpl.create(chartProvider);
         longPress = ECGLongPressImpl.create(chartProvider);

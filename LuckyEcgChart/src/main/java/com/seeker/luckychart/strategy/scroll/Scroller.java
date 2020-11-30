@@ -7,6 +7,6 @@ package com.seeker.luckychart.strategy.scroll;
  */
 public interface Scroller {
 
-    ScrollResult scroll(float startX,float startY,float distanceX,float distanceY);
+    ScrollResult scroll(float startX, float startY, float distanceX, float distanceY);
 
 }

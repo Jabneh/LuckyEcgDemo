@@ -16,7 +16,7 @@ import com.seeker.luckychart.strategy.scroll.Scroller;
  * @date 2018/11/3/003  10:16
  * @describe ecg心电图手势相关策略生成工厂
  */
-public class DefaultStrategyFactory implements GestureProvider{
+public class DefaultStrategyFactory implements GestureProvider {
 
     private DoubleTap doubleTap;
 
@@ -28,16 +28,16 @@ public class DefaultStrategyFactory implements GestureProvider{
 
     private ChartProvider chartProvider;
 
-    private DefaultStrategyFactory(ChartProvider provider){
+    private DefaultStrategyFactory(ChartProvider provider) {
         this.chartProvider = provider;
         initStrategies();
     }
 
-    public static DefaultStrategyFactory create(ChartProvider chartProvider){
+    public static DefaultStrategyFactory create(ChartProvider chartProvider) {
         return new DefaultStrategyFactory(chartProvider);
     }
 
-    private void initStrategies(){
+    private void initStrategies() {
         doubleTap = DefaultDoubleTabImpl.create(chartProvider);
         scroller = DefaultScrollerImpl.create(chartProvider);
         longPress = DefaultLongPressImpl.create(chartProvider);

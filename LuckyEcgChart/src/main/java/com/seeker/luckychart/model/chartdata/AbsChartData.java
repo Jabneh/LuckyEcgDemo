@@ -13,7 +13,7 @@ import com.seeker.luckychart.provider.DataProvider;
  * @describe 图表数据抽象类
  */
 
-public abstract class AbsChartData<Container extends AbsContainer> implements DataProvider<Container>{
+public abstract class AbsChartData<Container extends AbsContainer> implements DataProvider<Container> {
 
     private Container[] containers;
 
@@ -76,11 +76,11 @@ public abstract class AbsChartData<Container extends AbsContainer> implements Da
 
     @Override
     public boolean containDataContainer(Container container) {
-        if (this.containers == null || this.containers.length == 0){
+        if (this.containers == null || this.containers.length == 0) {
             return false;
         }
-        for (Container c:containers){
-            if (c.hashCode() == container.hashCode()){
+        for (Container c : containers) {
+            if (c.hashCode() == container.hashCode()) {
                 return true;
             }
         }
@@ -101,8 +101,8 @@ public abstract class AbsChartData<Container extends AbsContainer> implements Da
     @CallSuper
     @Override
     public void clear() {
-        if (containers != null){
-            for (Container c:containers){
+        if (containers != null) {
+            for (Container c : containers) {
                 c.clear();
             }
         }

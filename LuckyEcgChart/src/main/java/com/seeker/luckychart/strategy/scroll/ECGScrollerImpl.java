@@ -17,11 +17,11 @@ public class ECGScrollerImpl implements Scroller {
 
     private ScrollResult scrollResult = new ScrollResult();
 
-    private ECGScrollerImpl(ChartProvider provider){
+    private ECGScrollerImpl(ChartProvider provider) {
         this.chartProvider = provider;
     }
 
-    public static ECGScrollerImpl create(ChartProvider provider){
+    public static ECGScrollerImpl create(ChartProvider provider) {
         return new ECGScrollerImpl(provider);
     }
 

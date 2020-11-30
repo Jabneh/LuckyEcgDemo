@@ -16,16 +16,12 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public final class ECGRealtimeComputator {
 
-    private @UIMode int mode = UIMode.TRANSLATE;
-
+    private @UIMode
+    int mode = UIMode.TRANSLATE;
     /**
      * 绘图区域要绘制的点的个数
      */
     private int plotMaxPointCount;
-
-
-
-
 
     //绘图区域的点
     private ECGPointValue[][] defaultRenderPoints;
@@ -44,11 +40,11 @@ public final class ECGRealtimeComputator {
 
     private int ecgLineContainerCount;
 
-    private ECGRealtimeComputator(){
+    private ECGRealtimeComputator() {
 
     }
 
-    public static ECGRealtimeComputator create(){
+    public static ECGRealtimeComputator create() {
         return new ECGRealtimeComputator();
     }
 
@@ -56,40 +52,41 @@ public final class ECGRealtimeComputator {
         this.ecgLineContainerCount = ecgLineContainerCount;
         this.defaultContainers = new ECGPointContainer[this.ecgLineContainerCount];
         this.defaultOptions = new Options[this.ecgLineContainerCount];
-        for (int i = 0;i < this.ecgLineContainerCount;i++){
+        for (int i = 0; i < this.ecgLineContainerCount; i++) {
             this.defaultContainers[i] = ECGPointContainer.create();
             this.defaultOptions[i] = new Options();
         }
         this.defaultChartData = ECGChartData.create(this.defaultContainers);
     }
 
-    public void setPlotMaxPointCount(int pointCount){
-        if (plotMaxPointCount == pointCount){
+    public void setPlotMaxPointCount(int pointCount) {
+        if (plotMaxPointCount == pointCount) {
             return;
         }
         this.plotMaxPointCount = pointCount;
         this.defaultRenderPoints = new ECGPointValue[ecgLineContainerCount][plotMaxPointCount];
-        for (int i = 0;i < ecgLineContainerCount;i++){
+        for (int i = 0; i < ecgLineContainerCount; i++) {
             this.defaultContainers[i].setValues(this.defaultRenderPoints[i]);
         }
     }
 
     /**
      * 把将要绘制的点转移到绘图区当中
+     *
      * @param points ，将要添加到绘图区的点的组合
      */
     public void updatePointsToRender(int targetLineIndex, ECGPointValue... points) {
-        if (targetLineIndex >= ecgLineContainerCount){
-            throw new ArrayIndexOutOfBoundsException("targetLineIndex("+targetLineIndex+") >= ecgLineContainerCount("+this.ecgLineContainerCount+")!!");
+        if (targetLineIndex >= ecgLineContainerCount) {
+            throw new ArrayIndexOutOfBoundsException("targetLineIndex(" + targetLineIndex + ") >= ecgLineContainerCount(" + this.ecgLineContainerCount + ")!!");
         }
         try {
             lock.lock();
             if (null != points && points.length > 0) {
                 checkNull();
                 if (mode == UIMode.TRANSLATE) {
-                    translate(defaultRenderPoints[targetLineIndex],defaultOptions[targetLineIndex],points);
+                    translate(defaultRenderPoints[targetLineIndex], defaultOptions[targetLineIndex], points);
                 } else if (mode == UIMode.ERASE) {
-                    erase(defaultRenderPoints[targetLineIndex],defaultOptions[targetLineIndex],points);
+                    erase(defaultRenderPoints[targetLineIndex], defaultOptions[targetLineIndex], points);
                 }
                 defaultContainers[targetLineIndex].setValues(defaultRenderPoints[targetLineIndex]);
                 defaultChartData.setDataContainer(defaultContainers);
@@ -102,48 +99,49 @@ public final class ECGRealtimeComputator {
 
     /**
      * 数据平移
+     *
      * @param points
      * @return
      */
-    private void translate(ECGPointValue[] renderPoints,Options options,ECGPointValue... points){
+    private void translate(ECGPointValue[] renderPoints, Options options, ECGPointValue... points) {
         final int lengthIn = points.length;
-        if (options.translateAppended){
-            if (options.preAppendIndex + lengthIn <= plotMaxPointCount){
-                copyFrom(renderPoints,options.preAppendIndex,lengthIn,points);
+        if (options.translateAppended) {
+            if (options.preAppendIndex + lengthIn <= plotMaxPointCount) {
+                copyFrom(renderPoints, options.preAppendIndex, lengthIn, points);
                 options.preAppendIndex += lengthIn;
-            }else {
-                int destPos = Math.max(0,plotMaxPointCount-lengthIn);
-                copyFrom(renderPoints,destPos,plotMaxPointCount-destPos,points);
+            } else {
+                int destPos = Math.max(0, plotMaxPointCount - lengthIn);
+                copyFrom(renderPoints, destPos, plotMaxPointCount - destPos, points);
                 options.preAppendIndex = destPos;
                 options.translateAppended = false;
             }
-            if (!options.translateAppended){
+            if (!options.translateAppended) {
                 options.preAppendIndex = 0;
             }
 
-        }else {
+        } else {
             int startIndex;
-            if (lengthIn >= plotMaxPointCount){
+            if (lengthIn >= plotMaxPointCount) {
                 startIndex = 0;
-                System.arraycopy(points,lengthIn-plotMaxPointCount,renderPoints,startIndex,plotMaxPointCount);
-            }else {
-                startIndex = plotMaxPointCount-lengthIn;
-                ECGPointValue[] temp = Arrays.copyOfRange(renderPoints,0,lengthIn);
-                System.arraycopy(renderPoints,lengthIn,renderPoints,0,startIndex);
-                System.arraycopy(temp,0,renderPoints,startIndex,lengthIn);
-                copyFrom(renderPoints,startIndex,lengthIn,points);
+                System.arraycopy(points, lengthIn - plotMaxPointCount, renderPoints, startIndex, plotMaxPointCount);
+            } else {
+                startIndex = plotMaxPointCount - lengthIn;
+                ECGPointValue[] temp = Arrays.copyOfRange(renderPoints, 0, lengthIn);
+                System.arraycopy(renderPoints, lengthIn, renderPoints, 0, startIndex);
+                System.arraycopy(temp, 0, renderPoints, startIndex, lengthIn);
+                copyFrom(renderPoints, startIndex, lengthIn, points);
             }
         }
     }
 
-    private void copyFrom(ECGPointValue[] renderPoints,int from,int lengthIn,ECGPointValue... values){
-        int len = Math.min(lengthIn,values.length);
+    private void copyFrom(ECGPointValue[] renderPoints, int from, int lengthIn, ECGPointValue... values) {
+        int len = Math.min(lengthIn, values.length);
         int realIndex;
-        for (int i = 0;i < len;++i){
+        for (int i = 0; i < len; ++i) {
             realIndex = from + i;
-            if (realIndex >= 0 && realIndex < renderPoints.length){
+            if (realIndex >= 0 && realIndex < renderPoints.length) {
                 ECGPointValue ecgPointValue = renderPoints[realIndex];
-                if (ecgPointValue == null){
+                if (ecgPointValue == null) {
                     ecgPointValue = new ECGPointValue();
                     renderPoints[realIndex] = ecgPointValue;
                 }
@@ -155,13 +153,14 @@ public final class ECGRealtimeComputator {
 
     /**
      * R峰标识补助
+     *
      * @param rposition 位置
-     * @param type 类型
-     * @param typeAnno 描述
+     * @param type      类型
+     * @param typeAnno  描述
      * @param needRPeak 修复心博类型的时候，是否要判断当前是否是心博，主要是用于修复前前一个心博的
      */
     @Deprecated
-    public void repairPointRPeak(int rposition, int type, String typeAnno, boolean needRPeak){
+    public void repairPointRPeak(int rposition, int type, String typeAnno, boolean needRPeak) {
 //        synchronized (lock) {
 //            int realIndex = -1;
 //            if (mode == UIMode.TRANSLATE) {
@@ -196,72 +195,73 @@ public final class ECGRealtimeComputator {
 
     /**
      * 数据擦除刷新模式
+     *
      * @param points
      */
-    private void erase(ECGPointValue[] renderPoints,Options options,ECGPointValue... points){
+    private void erase(ECGPointValue[] renderPoints, Options options, ECGPointValue... points) {
         final int lengthIn = points.length;
-        if (lengthIn >= plotMaxPointCount){
-            System.arraycopy(points,lengthIn-plotMaxPointCount,renderPoints,0,plotMaxPointCount);
+        if (lengthIn >= plotMaxPointCount) {
+            System.arraycopy(points, lengthIn - plotMaxPointCount, renderPoints, 0, plotMaxPointCount);
             options.preAppendIndex = 0;
             options.translateAppended = false;
-        }else if (lengthIn + options.preAppendIndex <= plotMaxPointCount){
-            copyFrom(renderPoints,options.preAppendIndex,lengthIn,points);
+        } else if (lengthIn + options.preAppendIndex <= plotMaxPointCount) {
+            copyFrom(renderPoints, options.preAppendIndex, lengthIn, points);
             options.preAppendIndex += lengthIn;
-        }else {
+        } else {
             int part1 = plotMaxPointCount - options.preAppendIndex;
-            copyFrom(renderPoints,options.preAppendIndex,part1, Arrays.copyOfRange(points,0,part1));
+            copyFrom(renderPoints, options.preAppendIndex, part1, Arrays.copyOfRange(points, 0, part1));
             int part2 = lengthIn - part1;
-            copyFrom(renderPoints,0,part2, Arrays.copyOfRange(points,part1,points.length));
+            copyFrom(renderPoints, 0, part2, Arrays.copyOfRange(points, part1, points.length));
             options.preAppendIndex = part2;
             options.translateAppended = false;
         }
     }
 
-    public void setDrawNoise(boolean isDraw){
+    public void setDrawNoise(boolean isDraw) {
         this.drawNoise = isDraw;
         checkNull();
     }
 
-    public void setDrawRPeak(boolean isDraw){
+    public void setDrawRPeak(boolean isDraw) {
         this.drawRPeak = isDraw;
         checkNull();
     }
 
-    public void reset(){
+    public void reset() {
         defaultRenderPoints = new ECGPointValue[ecgLineContainerCount][plotMaxPointCount];
-        for (int i = 0,len = defaultRenderPoints.length;i<len;i++){
+        for (int i = 0, len = defaultRenderPoints.length; i < len; i++) {
             ECGPointValue[] values = defaultRenderPoints[i];
-            Arrays.fill(values,null);
+            Arrays.fill(values, null);
             defaultContainers[i].setValues(values);
         }
-        for (Options options:defaultOptions){
+        for (Options options : defaultOptions) {
             options.reset();
         }
     }
 
-    private void checkNull(){
-        if (null == defaultContainers || defaultContainers.length != ecgLineContainerCount){
+    private void checkNull() {
+        if (null == defaultContainers || defaultContainers.length != ecgLineContainerCount) {
             defaultContainers = new ECGPointContainer[ecgLineContainerCount];
-            for (int i = 0;i<ecgLineContainerCount;i++){
+            for (int i = 0; i < ecgLineContainerCount; i++) {
                 defaultContainers[i] = ECGPointContainer.create();
             }
         }
-        if (null == defaultChartData){
+        if (null == defaultChartData) {
             defaultChartData = ECGChartData.create();
         }
 
-        if (null == defaultRenderPoints || defaultRenderPoints.length != ecgLineContainerCount){
+        if (null == defaultRenderPoints || defaultRenderPoints.length != ecgLineContainerCount) {
             defaultRenderPoints = new ECGPointValue[ecgLineContainerCount][plotMaxPointCount];
         }
 
-        for (ECGPointContainer container:defaultContainers){
+        for (ECGPointContainer container : defaultContainers) {
             container.setDrawNoise(drawNoise);
             container.setDrawRpeak(drawRPeak);
         }
     }
 
     public void setMode(@UIMode int mode) {
-        if (this.mode != mode){
+        if (this.mode != mode) {
             this.mode = mode;
             reset();
         }
@@ -274,7 +274,7 @@ public final class ECGRealtimeComputator {
         return defaultChartData;
     }
 
-    private static class Options{
+    private static class Options {
         /**
          * 绘图区数据是否已经填满过
          */
@@ -282,7 +282,7 @@ public final class ECGRealtimeComputator {
 
         int preAppendIndex = 0;
 
-        void reset(){
+        void reset() {
             translateAppended = true;
             preAppendIndex = 0;
         }

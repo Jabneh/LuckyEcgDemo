@@ -53,7 +53,7 @@ public final class ChartComputator {
      */
     private Coordinateport visibleCoorport = new Coordinateport();
 
-    private float mDensity,mScaledDensity;
+    private float mDensity, mScaledDensity;
 
     private int deviceMin;//手机设备等小的一边大小
 
@@ -68,22 +68,19 @@ public final class ChartComputator {
 
     private ECGRenderStrategy renderStrategy;
 
-    private ChartComputator(Context context){
+    private ChartComputator(Context context) {
         final DisplayMetrics dm = context.getResources().getDisplayMetrics();
         this.mDensity = dm.density;
         this.mScaledDensity = dm.scaledDensity;
-        this.deviceMin = Math.min(dm.widthPixels,dm.heightPixels);
+        this.deviceMin = Math.min(dm.widthPixels, dm.heightPixels);
     }
 
-    public boolean onChartSizeChanged(int width,int height){
+    public static ChartComputator create(Context context) {
+        return new ChartComputator(context);
+    }
+
+    public boolean onChartSizeChanged(int width, int height) {
         return !(chartWidth == width && chartHeight == height);
-    }
-
-    public void setChartFactSize(int width,int height){
-        this.chartWidth = width;
-        this.chartHeight = height;
-        this.chartContentRect.set(0,0,width,height);
-        this.dataContentRect.set(chartContentRect);
     }
 
     public void insetContentRect(int deltaLeft, int deltaTop, int deltaRight, int deltaBottom) {
@@ -93,32 +90,39 @@ public final class ChartComputator {
         dataContentRect.bottom -= deltaBottom;
     }
 
-    public void setVisibleCoorport(@NonNull Coordinateport visible){
+    public void setChartFactSize(int width, int height) {
+        this.chartWidth = width;
+        this.chartHeight = height;
+        this.chartContentRect.set(0, 0, width, height);
+        this.dataContentRect.set(chartContentRect);
+    }
+
+    public void setVisibleCoorport(@NonNull Coordinateport visible) {
         visibleCoorport.set(visible);
     }
 
-    public void setVisibleCoorport(float left, float top, float right, float bottom){
+    public void setVisibleCoorport(float left, float top, float right, float bottom) {
         constrainViewport(left, top, right, bottom);
     }
 
-    public void setMaxCoorport(@NonNull Coordinateport max){
+    public void setMaxCoorport(@NonNull Coordinateport max) {
         maxCoorport.set(max);
         computeMinimumWidthAndHeight();
     }
 
     //缩放 now just for ecg
-    public void scale(@NonNull Coordinateport scaleBasic){
+    public void scale(@NonNull Coordinateport scaleBasic) {
         float visibleCenterX = visibleCoorport.centerX();
         float basicWidth = scaleBasic.width();
-        float scaleLeft = Math.max(visibleCenterX - basicWidth/2,0);
-        float scaleRight = Math.min(visibleCenterX + basicWidth/2,maxCoorport.right);
-        visibleCoorport.set(scaleLeft,scaleBasic.top,scaleRight,scaleBasic.bottom);
+        float scaleLeft = Math.max(visibleCenterX - basicWidth / 2, 0);
+        float scaleRight = Math.min(visibleCenterX + basicWidth / 2, maxCoorport.right);
+        visibleCoorport.set(scaleLeft, scaleBasic.top, scaleRight, scaleBasic.bottom);
         maxCoorport.top = scaleBasic.top;
         maxCoorport.bottom = scaleBasic.bottom;
     }
 
     //增益 now just for ecg
-    public void gain(float top,float bottom){
+    public void gain(float top, float bottom) {
         visibleCoorport.top = top;
         visibleCoorport.bottom = bottom;
         maxCoorport.top = top;
@@ -126,95 +130,87 @@ public final class ChartComputator {
     }
 
     //now just for ecg
-    public void setProgress(@FloatRange(from = 0f,to = 1f) float progress){
+    public void setProgress(@FloatRange(from = 0f, to = 1f) float progress) {
         float left = (maxCoorport.width() - visibleCoorport.width()) * progress;
         float right = left + visibleCoorport.width();
-        setViewportTopLeft(left,visibleCoorport.top);
+        setViewportTopLeft(left, visibleCoorport.top);
     }
 
-    public void setViewportTopLeft(float left,float top){
+    public void setViewportTopLeft(float left, float top) {
         final float width = visibleCoorport.width();
         final float height = visibleCoorport.height();
-        left = Math.max(maxCoorport.left,Math.min(left,maxCoorport.right - width));
-        top = Math.max(maxCoorport.bottom+height,Math.min(top,maxCoorport.top));
-        constrainViewport(left,top,left+width,top-height);
+        left = Math.max(maxCoorport.left, Math.min(left, maxCoorport.right - width));
+        top = Math.max(maxCoorport.bottom + height, Math.min(top, maxCoorport.top));
+        constrainViewport(left, top, left + width, top - height);
     }
 
     private void constrainViewport(float left, float top, float right, float bottom) {
 
-        if (right - left < minViewportWidth){
+        if (right - left < minViewportWidth) {
             right = left + minViewportWidth;
-            if (left < maxCoorport.left){
+            if (left < maxCoorport.left) {
                 left = maxCoorport.left;
                 right = left + minViewportWidth;
-            }else if (right > maxCoorport.right){
+            } else if (right > maxCoorport.right) {
                 right = maxCoorport.right;
                 left = right - minViewportWidth;
             }
         }
 
-        if (top - bottom < minViewportHeight){
+        if (top - bottom < minViewportHeight) {
             bottom = top - minViewportHeight;
-            if (top > maxCoorport.top){
+            if (top > maxCoorport.top) {
                 top = maxCoorport.top;
                 bottom = top - minViewportHeight;
-            }else if (bottom < maxCoorport.bottom){
+            } else if (bottom < maxCoorport.bottom) {
                 bottom = maxCoorport.bottom;
                 top = bottom + minViewportHeight;
             }
         }
 
-        visibleCoorport.left = Math.max(maxCoorport.left,left);
-        visibleCoorport.top = Math.min(maxCoorport.top,top);
-        visibleCoorport.right = Math.min(maxCoorport.right,right);
-        visibleCoorport.bottom = Math.max(maxCoorport.bottom,bottom);
+        visibleCoorport.left = Math.max(maxCoorport.left, left);
+        visibleCoorport.top = Math.min(maxCoorport.top, top);
+        visibleCoorport.right = Math.min(maxCoorport.right, right);
+        visibleCoorport.bottom = Math.max(maxCoorport.bottom, bottom);
 
     }
 
     /**
      * 转化成opengl矢量坐标
+     *
      * @param x 实际手机物理x轴坐标
      * @param y 实际手机物理y轴坐标
      * @return
      */
-    public final PointF screenToCartesian(float x,float y){
+    public final PointF screenToCartesian(float x, float y) {
         Camera2D camera2D = chartRenderer.getCamera2D();
         float cameraWidth = (float) camera2D.getWidth();
         float cameraHeight = (float) camera2D.getHeight();
-        pointF.x = (x / chartRenderer.getViewportWidth()) * cameraWidth - cameraWidth/2;
-        pointF.y = ((chartRenderer.getViewportHeight() - y) / chartRenderer.getViewportHeight())*cameraHeight-cameraHeight/2;
+        pointF.x = (x / chartRenderer.getViewportWidth()) * cameraWidth - cameraWidth / 2;
+        pointF.y = ((chartRenderer.getViewportHeight() - y) / chartRenderer.getViewportHeight()) * cameraHeight - cameraHeight / 2;
         return pointF;
     }
 
     /**
      * 转化为实际手机物理坐标
+     *
      * @param x 虚拟坐标
      * @return
      */
-    public final float computeRawX(float x){
-        float pixelOffset = (x - visibleCoorport.left) *(dataContentRect.width() / visibleCoorport.width());
+    public final float computeRawX(float x) {
+        float pixelOffset = (x - visibleCoorport.left) * (dataContentRect.width() / visibleCoorport.width());
         return dataContentRect.left + pixelOffset;
     }
 
     /**
      * 转化为实际手机物理坐标
+     *
      * @param y 虚拟坐标
      * @return
      */
-    public final float computeRawY(float y){
-        float pixelOffset = (y - visibleCoorport.bottom)*(dataContentRect.height() / visibleCoorport.height());
+    public final float computeRawY(float y) {
+        float pixelOffset = (y - visibleCoorport.bottom) * (dataContentRect.height() / visibleCoorport.height());
         return dataContentRect.bottom - pixelOffset;
-    }
-
-    /**
-     * 转化为实际手机物理坐标
-     * @param y 虚拟坐标
-     * @return
-     */
-    public final float computeECGRawY(float y,float bottom){
-        float singleHeight = getSingleEcgChartHeight();
-        float pixelOffset = (y - visibleCoorport.bottom)*(singleHeight / visibleCoorport.height());
-        return bottom - pixelOffset;
     }
 
 
@@ -223,15 +219,16 @@ public final class ChartComputator {
                 (int) (maxCoorport.height() * dataContentRect.height() / visibleCoorport.height()));
     }
 
-    //物理实际坐标转化成虚拟坐标
-    public boolean computeVitual(float x,float y,PointF dest){
-        if (!dataContentRect.contains((int) x,(int) y)){
-            return false;
-        }
-        float virtualX = visibleCoorport.left +(x-dataContentRect.left)*visibleCoorport.width()/dataContentRect.width();
-        float virtualY = visibleCoorport.bottom +(y-dataContentRect.bottom)*visibleCoorport.height()/-dataContentRect.height();
-        dest.set(virtualX,virtualY);
-        return true;
+    /**
+     * 转化为实际手机物理坐标
+     *
+     * @param y 虚拟坐标
+     * @return
+     */
+    public final float computeECGRawY(float y, float bottom) {
+        float singleHeight = getSingleEcgChartHeight();
+        float pixelOffset = (y - visibleCoorport.bottom) * (singleHeight / visibleCoorport.height());
+        return bottom - pixelOffset;
     }
 
 
@@ -256,8 +253,15 @@ public final class ChartComputator {
         return dataContentRect;
     }
 
-    public static ChartComputator create(Context context){
-        return new ChartComputator(context);
+    //物理实际坐标转化成虚拟坐标
+    public boolean computeVitual(float x, float y, PointF dest) {
+        if (!dataContentRect.contains((int) x, (int) y)) {
+            return false;
+        }
+        float virtualX = visibleCoorport.left + (x - dataContentRect.left) * visibleCoorport.width() / dataContentRect.width();
+        float virtualY = visibleCoorport.bottom + (y - dataContentRect.bottom) * visibleCoorport.height() / -dataContentRect.height();
+        dest.set(virtualX, virtualY);
+        return true;
     }
 
     public float getDensity() {
@@ -301,11 +305,11 @@ public final class ChartComputator {
     }
 
     //返回单个ecg图波纹高度
-    public float getSingleEcgChartHeight(){
+    public float getSingleEcgChartHeight() {
         float height = getChartContentRect().height();
         float space = renderStrategy.getEcgPortSpace();
         int count = renderStrategy.getEcgLineCount();
-        return (height-space*(count-1))/count;
+        return (height - space * (count - 1)) / count;
     }
 
 }

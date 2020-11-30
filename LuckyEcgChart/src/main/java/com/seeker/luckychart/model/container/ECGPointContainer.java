@@ -7,7 +7,7 @@ import com.seeker.luckychart.model.ECGPointValue;
  * @date 2018/10/15/015  10:02
  * @describe 心电图点模型容器
  */
-public class ECGPointContainer extends AbsContainer<ECGPointValue>{
+public class ECGPointContainer extends AbsContainer<ECGPointValue> {
 
     private boolean drawNoise;//是否绘制噪音
 
@@ -15,19 +15,19 @@ public class ECGPointContainer extends AbsContainer<ECGPointValue>{
 
     private int destIndex = 0;
 
-    private ECGPointContainer(ECGPointValue[] values){
+    private ECGPointContainer(ECGPointValue[] values) {
         super(values);
     }
 
-    private ECGPointContainer(){
+    private ECGPointContainer() {
         super();
     }
 
-    public static ECGPointContainer create(){
+    public static ECGPointContainer create() {
         return new ECGPointContainer();
     }
 
-    public static ECGPointContainer create(ECGPointValue[] values){
+    public static ECGPointContainer create(ECGPointValue[] values) {
         return new ECGPointContainer(values);
     }
 
@@ -49,7 +49,7 @@ public class ECGPointContainer extends AbsContainer<ECGPointValue>{
 
     @Override
     public void updateNewValues(ECGPointValue[] newValues) {
-        if (newValues == null || newValues.length == 0){
+        if (newValues == null || newValues.length == 0) {
             return;
         }
 
@@ -59,12 +59,12 @@ public class ECGPointContainer extends AbsContainer<ECGPointValue>{
 
         int len = values.length;
 
-        if (destIndex + addCount <= len){
-            System.arraycopy(newValues,0,values,destIndex,addCount);
+        if (destIndex + addCount <= len) {
+            System.arraycopy(newValues, 0, values, destIndex, addCount);
             destIndex += addCount;
-        }else {
+        } else {
             int subAdd = addCount + destIndex - len;
-            System.arraycopy(values, subAdd, values, 0, len-subAdd);
+            System.arraycopy(values, subAdd, values, 0, len - subAdd);
             System.arraycopy(newValues, 0, values, len - addCount, addCount);
             destIndex = len;
         }
@@ -73,9 +73,10 @@ public class ECGPointContainer extends AbsContainer<ECGPointValue>{
 
     /**
      * 返回数组有效的长度， start 0
+     *
      * @return
      */
-    public int getValidCount(){
+    public int getValidCount() {
         return destIndex;
     }
 

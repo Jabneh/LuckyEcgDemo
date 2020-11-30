@@ -23,7 +23,7 @@ public abstract class AbstractChartAxesRenderer<ChartData extends AbsChartData> 
 
     protected ChartComputator chartComputator;
 
-    AbstractChartAxesRenderer(ChartProvider<ChartData> provider){
+    AbstractChartAxesRenderer(ChartProvider<ChartData> provider) {
         this.chartProvider = provider;
         this.chartComputator = provider.getChartComputator();
     }
@@ -43,43 +43,43 @@ public abstract class AbstractChartAxesRenderer<ChartData extends AbsChartData> 
         onChanged();
     }
 
-    private void onChanged(){
+    private void onChanged() {
         AxisProvider axisProvider = chartProvider.getChartData();
-        if (axisProvider != null){
-            initAxis(axisProvider.getLeftAxis(),ChartAxis.LEFT);
-            initAxis(axisProvider.getTopAxis(),ChartAxis.TOP);
-            initAxis(axisProvider.getRightAxis(),ChartAxis.RIGHT);
-            initAxis(axisProvider.getBottomAxis(),ChartAxis.BOTTOM);
+        if (axisProvider != null) {
+            initAxis(axisProvider.getLeftAxis(), ChartAxis.LEFT);
+            initAxis(axisProvider.getTopAxis(), ChartAxis.TOP);
+            initAxis(axisProvider.getRightAxis(), ChartAxis.RIGHT);
+            initAxis(axisProvider.getBottomAxis(), ChartAxis.BOTTOM);
         }
     }
 
-    private void initAxis(ChartAxis axis, @ChartAxis.Location int location){
-        if (null == axis)return;
-        initAxisPaints(axis,location);
-        initAxisMargin(axis,location);
-        initAxisMeasurements(axis,location);
+    private void initAxis(ChartAxis axis, @ChartAxis.Location int location) {
+        if (null == axis) return;
+        initAxisPaints(axis, location);
+        initAxisMargin(axis, location);
+        initAxisMeasurements(axis, location);
         initContentRect(axis, location);
     }
 
 
-    private void initAxisPaints(ChartAxis axis, @ChartAxis.Location int location){
+    private void initAxisPaints(ChartAxis axis, @ChartAxis.Location int location) {
         axis.initFontMetricsInt();
-        if (isAxisVertical(location)){
+        if (isAxisVertical(location)) {
             axis.setCoorDimensionForMargins(axis.getCoorWidth());
-        }else {
-            axis.setCoorDimensionForMargins(axis.getCoorTextAscent()+axis.getCoorTextDescent());
+        } else {
+            axis.setCoorDimensionForMargins(axis.getCoorTextAscent() + axis.getCoorTextDescent());
         }
     }
 
-    private void initAxisMargin(ChartAxis axis, @ChartAxis.Location int location){
-        int margin = ChartUtils.dp2px(chartComputator.getDensity(),axis.getAxisMargin())+axis.getCoorDimensionForMargins();
+    private void initAxisMargin(ChartAxis axis, @ChartAxis.Location int location) {
+        int margin = ChartUtils.dp2px(chartComputator.getDensity(), axis.getAxisMargin()) + axis.getCoorDimensionForMargins();
         margin += getAxisNameMargin(axis);
-        insetContentRectWithAxesMargins(margin,location);
+        insetContentRectWithAxesMargins(margin, location);
     }
 
-    private void initAxisMeasurements(ChartAxis axis, @ChartAxis.Location int location){
+    private void initAxisMeasurements(ChartAxis axis, @ChartAxis.Location int location) {
 
-        int axisMargin = ChartUtils.dp2px(chartComputator.getDensity(),axis.getAxisMargin());
+        int axisMargin = ChartUtils.dp2px(chartComputator.getDensity(), axis.getAxisMargin());
 
         Rect dataContentRect = chartComputator.getDataContentRect();
 
@@ -102,35 +102,35 @@ public abstract class AbstractChartAxesRenderer<ChartData extends AbsChartData> 
                 axis.setSeparationLine(dataContentRect.top);
                 break;
             case ChartAxis.BOTTOM:
-                axis.setCoorBaseLine(dataContentRect.bottom + axisMargin+axis.getCoorHeight());
+                axis.setCoorBaseLine(dataContentRect.bottom + axisMargin + axis.getCoorHeight());
                 axis.setNameBaseLine(axis.getCoorBaseLine() + axisMargin + axis.getCoorDimensionForMargins());
                 axis.setSeparationLine(dataContentRect.bottom);
                 break;
         }
     }
 
-    private void initContentRect(ChartAxis axis, @ChartAxis.Location int location){
-        if (isAxisVertical(location)){
-            chartComputator.insetContentRect(0,axis.getCoorTextAscent(),0,0);
-        }else {
-            chartComputator.insetContentRect(0,0,axis.getCoorWidth()/2,0);
+    private void initContentRect(ChartAxis axis, @ChartAxis.Location int location) {
+        if (isAxisVertical(location)) {
+            chartComputator.insetContentRect(0, axis.getCoorTextAscent(), 0, 0);
+        } else {
+            chartComputator.insetContentRect(0, 0, axis.getCoorWidth() / 2, 0);
         }
     }
 
-    private int getAxisNameMargin(ChartAxis axis){
+    private int getAxisNameMargin(ChartAxis axis) {
         int margin = 0;
-        if (!TextUtils.isEmpty(axis.getName())){
+        if (!TextUtils.isEmpty(axis.getName())) {
             margin += axis.getNameTextAscent();
             margin += axis.getNameTextDescent();
-            margin += ChartUtils.dp2px(chartComputator.getDensity(),axis.getAxisMargin());
+            margin += ChartUtils.dp2px(chartComputator.getDensity(), axis.getAxisMargin());
         }
         return margin;
     }
 
-    private void insetContentRectWithAxesMargins(int margin,@ChartAxis.Location int location){
+    private void insetContentRectWithAxesMargins(int margin, @ChartAxis.Location int location) {
         switch (location) {
             case ChartAxis.LEFT:
-                chartComputator.insetContentRect(margin,0,0,0);
+                chartComputator.insetContentRect(margin, 0, 0, 0);
                 break;
             case ChartAxis.BOTTOM:
                 chartComputator.insetContentRect(0, 0, 0, margin);
@@ -146,13 +146,14 @@ public abstract class AbstractChartAxesRenderer<ChartData extends AbsChartData> 
 
     /**
      * 判断坐标轴方向
+     *
      * @param location
      * @return
      */
-    protected boolean isAxisVertical(@ChartAxis.Location int location){
-        if (location == ChartAxis.LEFT || location == ChartAxis.RIGHT){
+    protected boolean isAxisVertical(@ChartAxis.Location int location) {
+        if (location == ChartAxis.LEFT || location == ChartAxis.RIGHT) {
             return true;
-        }else if (location == ChartAxis.TOP || location == ChartAxis.BOTTOM){
+        } else if (location == ChartAxis.TOP || location == ChartAxis.BOTTOM) {
             return false;
         }
         throw new IllegalArgumentException("Invalid axis location " + location);

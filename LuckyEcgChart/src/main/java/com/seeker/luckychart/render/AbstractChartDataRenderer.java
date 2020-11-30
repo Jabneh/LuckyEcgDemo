@@ -22,7 +22,7 @@ public abstract class AbstractChartDataRenderer<ChartData extends AbsChartData> 
     protected ChartComputator chartComputator;
 
 
-    public AbstractChartDataRenderer(ChartProvider<ChartData> provider){
+    public AbstractChartDataRenderer(ChartProvider<ChartData> provider) {
         this.chartProvider = provider;
         this.chartComputator = provider.getChartComputator();
     }
@@ -32,16 +32,16 @@ public abstract class AbstractChartDataRenderer<ChartData extends AbsChartData> 
 
     }
 
-    public boolean checkDataAvailable(){
+    public boolean checkDataAvailable() {
 
         ChartData chartData = chartProvider.getChartData();
-        if (chartData == null){
-            ChartLogger.wTag(TAG,"checkDataAvailable(),chartData == null.");
+        if (chartData == null) {
+            ChartLogger.wTag(TAG, "checkDataAvailable(),chartData == null.");
             return false;
         }
         AbsContainer[] containers = chartData.getDataContainer();
-        if (containers == null || containers.length == 0){
-            ChartLogger.wTag(TAG,"checkDataAvailable(),container == null.");
+        if (containers == null || containers.length == 0) {
+            ChartLogger.wTag(TAG, "checkDataAvailable(),container == null.");
             return false;
         }
 //        Object[] values = container.getValues();

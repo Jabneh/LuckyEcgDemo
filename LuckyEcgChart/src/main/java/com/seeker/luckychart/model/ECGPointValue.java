@@ -7,7 +7,7 @@ import android.graphics.Color;
  * @date 2018/10/15/015  10:01
  * @describe 心电图点模型
  */
-public class ECGPointValue extends PointValue implements Cloneable{
+public class ECGPointValue extends PointValue implements Cloneable {
 
     private static final int DEFAULT_COLOR = Color.parseColor("#021F52");
 
@@ -21,14 +21,14 @@ public class ECGPointValue extends PointValue implements Cloneable{
 
     private boolean isRPeak;//是否是R峰
 
-    private int type =Integer.MIN_VALUE;//当前点的类型
+    private int type = Integer.MIN_VALUE;//当前点的类型
 
     private String typeAnno;
 
     private int index;
 
     @Override
-    public void init(){
+    public void init() {
         super.init();
         isNewStart = false;
         isNoise = false;
@@ -42,9 +42,10 @@ public class ECGPointValue extends PointValue implements Cloneable{
 
     /**
      * 数据的完全复制
+     *
      * @param value
      */
-    public void copyFrom(ECGPointValue value){
+    public void copyFrom(ECGPointValue value) {
         super.copyFrom(value);
         this.isNewStart = value.isNewStart;
         this.isNoise = value.isNoise;
@@ -55,7 +56,7 @@ public class ECGPointValue extends PointValue implements Cloneable{
         this.drawColor = value.drawColor;
     }
 
-    public int getDefaultColor(){
+    public int getDefaultColor() {
         return DEFAULT_COLOR;
     }
 

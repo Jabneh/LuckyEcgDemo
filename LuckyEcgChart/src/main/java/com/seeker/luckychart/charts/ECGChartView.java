@@ -27,7 +27,7 @@ import com.seeker.luckychart.strategy.scroll.Scroller;
  * @date 2018/10/15/015  9:45
  * @describe 心电图图表
  */
-public class ECGChartView extends AbstractChartView<ECGChartData> implements RealTime{
+public class ECGChartView extends AbstractChartView<ECGChartData> implements RealTime {
 
     private Coordinateport defaultCoordinateport = new Coordinateport();
 
@@ -44,7 +44,7 @@ public class ECGChartView extends AbstractChartView<ECGChartData> implements Rea
     private ECGRenderStrategy renderStrategy;
 
     public ECGChartView(Context context) {
-        this(context,null);
+        this(context, null);
     }
 
     public ECGChartView(Context context, AttributeSet attrs) {
@@ -52,7 +52,7 @@ public class ECGChartView extends AbstractChartView<ECGChartData> implements Rea
         realtimeComputator = ECGRealtimeComputator.create();
         gestureFactory = ECGStrategyFactory.create(this);
         renderStrategy = gestureFactory.getECGRenderStrategy();
-        applyAttributes(context,attrs);
+        applyAttributes(context, attrs);
         chartComputator.setRenderStrategy(renderStrategy);
         realtimeComputator.setEcgLineContainerCount(renderStrategy.getEcgLineCount());
     }
@@ -63,18 +63,18 @@ public class ECGChartView extends AbstractChartView<ECGChartData> implements Rea
         final int count = array.getIndexCount();
         for (int i = 0; i < count; ++i) {
             int attr = array.getIndex(i);
-            if (attr == R.styleable.ECGChartView_isTouchable){
-                setTouchable(array.getBoolean(attr,false));
-            }else if (attr == R.styleable.ECGChartView_yOuterCellCounts){
-                renderStrategy.setYOuterCellCounts(array.getInt(attr,ECGRenderStrategyImpl.DEFAULT_OUTER_CELLCOUNTS_Y));
-            }else if (attr == R.styleable.ECGChartView_ecgLineCount){
-                renderStrategy.setEcgLineCount(array.getInt(attr,1));
-            }else if (attr == R.styleable.ECGChartView_ecgportSpace){
-                renderStrategy.setEcgPortSpace(array.getDimensionPixelSize(attr,30));
-            }else if (attr == R.styleable.ECGChartView_markTextStyle){
+            if (attr == R.styleable.ECGChartView_isTouchable) {
+                setTouchable(array.getBoolean(attr, false));
+            } else if (attr == R.styleable.ECGChartView_yOuterCellCounts) {
+                renderStrategy.setYOuterCellCounts(array.getInt(attr, ECGRenderStrategyImpl.DEFAULT_OUTER_CELLCOUNTS_Y));
+            } else if (attr == R.styleable.ECGChartView_ecgLineCount) {
+                renderStrategy.setEcgLineCount(array.getInt(attr, 1));
+            } else if (attr == R.styleable.ECGChartView_ecgportSpace) {
+                renderStrategy.setEcgPortSpace(array.getDimensionPixelSize(attr, 30));
+            } else if (attr == R.styleable.ECGChartView_markTextStyle) {
                 renderStrategy.setMarkTextStyle(array.getString(attr));
-            }else if (attr == R.styleable.ECGChartView_canLineBound){
-                renderStrategy.setCanLineBound(array.getBoolean(attr,false));
+            } else if (attr == R.styleable.ECGChartView_canLineBound) {
+                renderStrategy.setCanLineBound(array.getBoolean(attr, false));
             }
         }
         array.recycle();
@@ -95,11 +95,11 @@ public class ECGChartView extends AbstractChartView<ECGChartData> implements Rea
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         final int measuredWithSize = getMeasuredWidth();
         final ECGRenderStrategy strategy = renderStrategy;
-        strategy.onViewMeasured(measuredWithSize,getMeasuredHeight(),measureResult);
+        strategy.onViewMeasured(measuredWithSize, getMeasuredHeight(), measureResult);
         int count = strategy.getEcgLineCount();
-        setMeasuredDimension(measureResult[0], (int) (measureResult[1]*count+(count-1)*strategy.getEcgPortSpace()));
-        defaultCoordinateport.set(0,strategy.getYMaxMvs()/2,
-                strategy.getXTotalPointCounts(),-strategy.getYMaxMvs()/2);
+        setMeasuredDimension(measureResult[0], (int) (measureResult[1] * count + (count - 1) * strategy.getEcgPortSpace()));
+        defaultCoordinateport.set(0, strategy.getYMaxMvs() / 2,
+                strategy.getXTotalPointCounts(), -strategy.getYMaxMvs() / 2);
         setChartVisibleCoordinateport(defaultCoordinateport);
         setChartMaxCoordinateport(defaultCoordinateport);
     }
@@ -108,12 +108,12 @@ public class ECGChartView extends AbstractChartView<ECGChartData> implements Rea
     public void setChartData(final ECGChartData chartData) {
         ECGPointContainer[] containers = chartData.getDataContainer();
 
-        if (containers != null && containers.length > 0){
+        if (containers != null && containers.length > 0) {
             int right = 0;
-            for (ECGPointContainer c:containers){
+            for (ECGPointContainer c : containers) {
                 ECGPointValue[] values = c.getValues();
-                if (values != null){
-                    right = Math.max(right,values.length);
+                if (values != null) {
+                    right = Math.max(right, values.length);
                 }
             }
             chartComputator.getMaxCoorport().right = right;
@@ -134,19 +134,19 @@ public class ECGChartView extends AbstractChartView<ECGChartData> implements Rea
 
     @Override
     public void onAsyRenderUpdateLagWork() {
-        if (visibleCoorPortChangedListener != null){
+        if (visibleCoorPortChangedListener != null) {
             Coordinateport visible = chartComputator.getVisibleCoorport();
             Coordinateport max = chartComputator.getMaxCoorport();
-            visibleCoorPortChangedListener.onChanged(visible,max);
+            visibleCoorPortChangedListener.onChanged(visible, max);
         }
-        synchronized (canScaleOrGain){
+        synchronized (canScaleOrGain) {
             canScaleOrGain = true;
         }
     }
 
     @Override
     @Deprecated
-    public void repairPointRPeak(int rposition,int type,String tyoeAnno,boolean needRPeak){
+    public void repairPointRPeak(int rposition, int type, String tyoeAnno, boolean needRPeak) {
 //        realtimeComputator.repairPointRPeak(rposition, type, tyoeAnno,needRPeak);
     }
 
@@ -190,7 +190,7 @@ public class ECGChartView extends AbstractChartView<ECGChartData> implements Rea
         return renderStrategy;
     }
 
-    public void initDefaultChartData(final boolean drawRPeak, final boolean drawNoise){
+    public void initDefaultChartData(final boolean drawRPeak, final boolean drawNoise) {
         post(new Runnable() {
             @Override
             public void run() {
@@ -202,47 +202,49 @@ public class ECGChartView extends AbstractChartView<ECGChartData> implements Rea
         });
     }
 
-    public void updatePointsToRender(int targetLineIndex, ECGPointValue... values){
-        realtimeComputator.updatePointsToRender(targetLineIndex,values);
+    public void updatePointsToRender(int targetLineIndex, ECGPointValue... values) {
+        realtimeComputator.updatePointsToRender(targetLineIndex, values);
     }
 
-    public void updatePointsToRender(ECGPointValue[]... values){
-        for (int i = 0,len = values.length;i < len;i++) {
-            realtimeComputator.updatePointsToRender(i,values[i]);
+    public void updatePointsToRender(ECGPointValue[]... values) {
+        for (int i = 0, len = values.length; i < len; i++) {
+            realtimeComputator.updatePointsToRender(i, values[i]);
         }
     }
 
     /**
      * 是否绘制R峰
+     *
      * @param draw
      */
-    public void setDrawRPeak(boolean draw){
+    public void setDrawRPeak(boolean draw) {
         realtimeComputator.setDrawRPeak(draw);
     }
 
     /**
      * 是否绘制噪音
+     *
      * @param draw
      */
-    public void setDrawNoise(boolean draw){
+    public void setDrawNoise(boolean draw) {
         realtimeComputator.setDrawNoise(draw);
     }
 
-    public void setMode(@UIMode int mode){
+    public void setMode(@UIMode int mode) {
         realtimeComputator.setMode(mode);
     }
 
-    public void reset(){
+    public void reset() {
         realtimeComputator.reset();
     }
 
     //放大
-    public void scaleUp(){
-        synchronized (canScaleOrGain){
-            if (!canScaleOrGain){
+    public void scaleUp() {
+        synchronized (canScaleOrGain) {
+            if (!canScaleOrGain) {
                 return;
             }
-            if (renderStrategy.scale(renderStrategy.getYOuterCellCount()-2)) {
+            if (renderStrategy.scale(renderStrategy.getYOuterCellCount() - 2)) {
                 defaultCoordinateport.set(0, renderStrategy.getYMaxMvs() / 2,
                         renderStrategy.getXTotalPointCounts(), -renderStrategy.getYMaxMvs() / 2);
                 chartComputator.scale(defaultCoordinateport);
@@ -252,12 +254,12 @@ public class ECGChartView extends AbstractChartView<ECGChartData> implements Rea
     }
 
     //缩小
-    public void scaleDown(){
-        synchronized (canScaleOrGain){
-            if (!canScaleOrGain){
+    public void scaleDown() {
+        synchronized (canScaleOrGain) {
+            if (!canScaleOrGain) {
                 return;
             }
-            if (renderStrategy.scale(renderStrategy.getYOuterCellCount()+2)) {
+            if (renderStrategy.scale(renderStrategy.getYOuterCellCount() + 2)) {
                 defaultCoordinateport.set(0, renderStrategy.getYMaxMvs() / 2,
                         renderStrategy.getXTotalPointCounts(), -renderStrategy.getYMaxMvs() / 2);
                 chartComputator.scale(defaultCoordinateport);
@@ -267,12 +269,12 @@ public class ECGChartView extends AbstractChartView<ECGChartData> implements Rea
     }
 
     //增益 +
-    public void gainUp(){
-        synchronized (canScaleOrGain){
-            if (!canScaleOrGain){
+    public void gainUp() {
+        synchronized (canScaleOrGain) {
+            if (!canScaleOrGain) {
                 return;
             }
-            if (renderStrategy.gain(renderStrategy.getYCellCountsPerMv()+1)) {
+            if (renderStrategy.gain(renderStrategy.getYCellCountsPerMv() + 1)) {
                 chartComputator.gain(renderStrategy.getYMaxMvs() / 2, -renderStrategy.getYMaxMvs() / 2);
                 layoutChanged();
             }
@@ -280,12 +282,12 @@ public class ECGChartView extends AbstractChartView<ECGChartData> implements Rea
     }
 
     //增益 -
-    public void gainDown(){
-        synchronized (canScaleOrGain){
-            if (!canScaleOrGain){
+    public void gainDown() {
+        synchronized (canScaleOrGain) {
+            if (!canScaleOrGain) {
                 return;
             }
-            if (renderStrategy.gain(renderStrategy.getYCellCountsPerMv()-1)) {
+            if (renderStrategy.gain(renderStrategy.getYCellCountsPerMv() - 1)) {
                 chartComputator.gain(renderStrategy.getYMaxMvs() / 2, -renderStrategy.getYMaxMvs() / 2);
                 layoutChanged();
             }
@@ -293,7 +295,7 @@ public class ECGChartView extends AbstractChartView<ECGChartData> implements Rea
     }
 
     //设置进度
-    public void setProgress(@FloatRange(from = 0f,to = 1f) float progress){
+    public void setProgress(@FloatRange(from = 0f, to = 1f) float progress) {
         chartComputator.setProgress(progress);
         applyRenderUpdate();
     }
@@ -302,19 +304,19 @@ public class ECGChartView extends AbstractChartView<ECGChartData> implements Rea
         this.visibleCoorPortChangedListener = visibleCoorPortChangedListener;
     }
 
-    private void layoutChanged(){
-        if (axesRenderer != null){
+    private void layoutChanged() {
+        if (axesRenderer != null) {
             axesRenderer.onChartlayoutChanged();
         }
-        if (dataRenderer != null){
+        if (dataRenderer != null) {
             dataRenderer.onChartlayoutChanged();
         }
         applyRenderUpdate();
     }
 
     //可视范围变化监听
-    public interface OnVisibleCoorPortChangedListener{
-        void onChanged(Coordinateport visiblePort,Coordinateport maxPort);
+    public interface OnVisibleCoorPortChangedListener {
+        void onChanged(Coordinateport visiblePort, Coordinateport maxPort);
     }
 
 }

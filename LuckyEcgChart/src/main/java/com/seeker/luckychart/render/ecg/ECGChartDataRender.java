@@ -58,7 +58,7 @@ public class ECGChartDataRender extends AbstractChartDataRenderer<ECGChartData> 
         this.chartView = chartView;
     }
 
-    public static ECGChartDataRender create(ECGChartView chartView){
+    public static ECGChartDataRender create(ECGChartView chartView) {
         return new ECGChartDataRender(chartView);
     }
 
@@ -70,70 +70,70 @@ public class ECGChartDataRender extends AbstractChartDataRenderer<ECGChartData> 
 
     @Override
     public void onDataRender() {
-        if (checkDataAvailable() && lineContainer != null){
+        if (checkDataAvailable() && lineContainer != null) {
             ECGChartData chartData = chartProvider.getChartData();
             ECGPointContainer[] containers = chartData.getDataContainer();
             ECGRenderStrategy renderStrategy = chartView.getECGRenderStrategy();
-            int count = Math.min(containers.length,renderStrategy.getEcgLineCount());
-            count = Math.min(count,lineContainer.getNumChildren());
-            for (int i = 0;i< count;i++){
+            int count = Math.min(containers.length, renderStrategy.getEcgLineCount());
+            count = Math.min(count, lineContainer.getNumChildren());
+            for (int i = 0; i < count; i++) {
                 ECGPointContainer container = containers[i];
                 ECGLine3D ecgLine = (ECGLine3D) lineContainer.getChildAt(i);
-                prepareEcgLine(container,ecgLine,i == 0);
+                prepareEcgLine(container, ecgLine, i == 0);
                 final ECGPointValue[] values = container.getValues();
-                float top = chartComputator.getSingleEcgChartHeight()*i+renderStrategy.getEcgPortSpace()*i;
+                float top = chartComputator.getSingleEcgChartHeight() * i + renderStrategy.getEcgPortSpace() * i;
                 float bottom = top + chartComputator.getSingleEcgChartHeight();
-                drawOscillogram(ecgLine,values,container.isDrawNoise(),container.isDrawRpeak(),top,bottom);
+                drawOscillogram(ecgLine, values, container.isDrawNoise(), container.isDrawRpeak(), top, bottom);
             }
         }
     }
 
-    private void drawOscillogram(ECGLine3D ecgLine,ECGPointValue[] values,boolean drawNoise,boolean drawRpeak,float top,float bottom){
+    private void drawOscillogram(ECGLine3D ecgLine, ECGPointValue[] values, boolean drawNoise, boolean drawRpeak, float top, float bottom) {
         Coordinateport visiblePort = chartComputator.getVisibleCoorport();
         ECGRenderStrategy renderStrategy = chartView.getECGRenderStrategy();
         int len = renderStrategy.getXTotalPointCounts();
         int startIndex = (int) visiblePort.left;
         int endIndex = startIndex + len;
-        if (endIndex > chartComputator.getMaxCoorport().right){
+        if (endIndex > chartComputator.getMaxCoorport().right) {
             endIndex = (int) chartComputator.getMaxCoorport().right;
             startIndex = endIndex - len;
-            startIndex = Math.max(0,startIndex);
+            startIndex = Math.max(0, startIndex);
         }
-        float preX = 0f,preY = 0f;
+        float preX = 0f, preY = 0f;
         int preColor = 0;
         float preRawY = 0;
-        for (int i = startIndex; i < endIndex; ++i){
+        for (int i = startIndex; i < endIndex; ++i) {
             ECGPointValue curPoint = values[i];
-            if (curPoint == null || Float.isNaN(curPoint.getCoorY())){
-                ecgLine.addVertexToBuffer(preX, preY,preColor,i-startIndex);
-            }else {
-                int drawColor = drawNoise || drawRpeak?curPoint.getDrawColor():curPoint.getDefaultColor();
+            if (curPoint == null || Float.isNaN(curPoint.getCoorY())) {
+                ecgLine.addVertexToBuffer(preX, preY, preColor, i - startIndex);
+            } else {
+                int drawColor = drawNoise || drawRpeak ? curPoint.getDrawColor() : curPoint.getDefaultColor();
                 float rawX = chartComputator.computeRawX(i);
-                float rawY = chartComputator.computeECGRawY(curPoint.getCoorY(),bottom);
-                if (!renderStrategy.isCanLineBound()){
-                    if (rawY > bottom){
-                        if (preRawY > bottom){
+                float rawY = chartComputator.computeECGRawY(curPoint.getCoorY(), bottom);
+                if (!renderStrategy.isCanLineBound()) {
+                    if (rawY > bottom) {
+                        if (preRawY > bottom) {
                             drawColor = Color.TRANSPARENT;
                         }
                         preRawY = rawY;
                         rawY = bottom;
-                    }else if (rawY < top){
-                        if (preRawY < top){
+                    } else if (rawY < top) {
+                        if (preRawY < top) {
                             drawColor = Color.TRANSPARENT;
                         }
                         preRawY = rawY;
                         rawY = top;
                     }
                 }
-                PointF pointF = chartComputator.screenToCartesian(rawX,rawY);
-                ecgLine.addVertexToBuffer(pointF.x, pointF.y,drawColor,i-startIndex);
+                PointF pointF = chartComputator.screenToCartesian(rawX, rawY);
+                ecgLine.addVertexToBuffer(pointF.x, pointF.y, drawColor, i - startIndex);
                 preX = pointF.x;
                 preY = pointF.y;
                 preColor = curPoint.getDrawColor();
-                if (drawRpeak && curPoint.isRPeak()){
+                if (drawRpeak && curPoint.isRPeak()) {
                     paint.setColor(curPoint.getDrawColor());
                     float width = paint.measureText(curPoint.getTypeAnno());
-                    canvas.drawText(curPoint.getTypeAnno(),rawX-width/2f,baseLine+top,paint);
+                    canvas.drawText(curPoint.getTypeAnno(), rawX - width / 2f, baseLine + top, paint);
                 }
             }
         }
@@ -144,24 +144,24 @@ public class ECGChartDataRender extends AbstractChartDataRenderer<ECGChartData> 
         }
     }
 
-    private void prepareEcgLine(ECGPointContainer container,ECGLine3D ecgLine,boolean clear){
+    private void prepareEcgLine(ECGPointContainer container, ECGLine3D ecgLine, boolean clear) {
         ecgLine.setLineThickness(container.getLineStrokeWidth());
         if (clear) {
             canvas.drawColor(0, PorterDuff.Mode.CLEAR);
         }
     }
 
-    private void initEcgLine(){
+    private void initEcgLine() {
         lineContainer = new Object3D();
         ECGRenderStrategy strategy = chartView.getECGRenderStrategy();
         int count = strategy.getEcgLineCount();
-        for (int i = 0;i < count;i++){
+        for (int i = 0; i < count; i++) {
             ECGLine3D ecgLine3D = new ECGLine3D(strategy.getXTotalPointCounts());
             lineContainer.addChild(ecgLine3D);
         }
     }
 
-    private void initAboutRPeak(){
+    private void initAboutRPeak() {
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setStyle(Paint.Style.FILL);
         float[] markStyle = chartView.getECGRenderStrategy().getMarkTextStyle();
@@ -173,7 +173,7 @@ public class ECGChartDataRender extends AbstractChartDataRenderer<ECGChartData> 
         baseLine = (height - fontMetrics.bottom - fontMetrics.top) / 2.0f;
 
         Camera2D camera2D = chartComputator.getChartRenderer().getCamera2D();
-        bpmPlane = new Plane((float) camera2D.getWidth(),(float) camera2D.getHeight(),2,1);
+        bpmPlane = new Plane((float) camera2D.getWidth(), (float) camera2D.getHeight(), 2, 1);
         bpmPlane.setDoubleSided(true);
         bpmPlane.setTransparent(true);
         bpmPlane.isContainer(false);
@@ -218,7 +218,7 @@ public class ECGChartDataRender extends AbstractChartDataRenderer<ECGChartData> 
 
     }
 
-    private void destroyChild(){
+    private void destroyChild() {
         Scene scene = chartView.getChartGlRenderer().getCurrentScene();
         List<Object3D> children = scene.getChildrenCopy();
         if (children.contains(lineContainer)) {

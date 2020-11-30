@@ -11,17 +11,17 @@ import com.seeker.luckychart.provider.ChartProvider;
  * @date 2018/11/3/003  14:41
  * @describe 默认图表缩放功能
  */
-public class DefaultScaler implements Scaler{
+public class DefaultScaler implements Scaler {
 
     private PointF viewportFocus = new PointF();
 
     private ChartComputator chartComputator;
 
-    private DefaultScaler(ChartProvider provider){
+    private DefaultScaler(ChartProvider provider) {
         this.chartComputator = provider.getChartComputator();
     }
 
-    public static DefaultScaler create(ChartProvider provider){
+    public static DefaultScaler create(ChartProvider provider) {
         return new DefaultScaler(provider);
     }
 
@@ -29,11 +29,11 @@ public class DefaultScaler implements Scaler{
     public boolean scale(ScaleGestureDetector detector) {
         final float focusX = detector.getFocusX();
         final float focusY = detector.getFocusY();
-        if (!chartComputator.computeVitual(focusX,focusY,viewportFocus)){
+        if (!chartComputator.computeVitual(focusX, focusY, viewportFocus)) {
             return false;
         }
         float scale = 2.0f - detector.getScaleFactor();
-        if (Float.isInfinite(scale)){
+        if (Float.isInfinite(scale)) {
             scale = 1f;
         }
         final float newWidth = chartComputator.getVisibleCoorport().width() * scale;

@@ -30,15 +30,15 @@ public class LuckySoftRenderer {
     private Canvas softwareCanvas;
 
     private LuckySoftRenderer(Context context, ECGPointValue[] values, SoftStrategy softStrategy, RealRenderer dataRenderer, RealRenderer axesArenderer) {
-        this.mSoftStrategy = softStrategy != null?softStrategy:new LuckySoftStrategy(values.length);
-        this.mDataRenerer = dataRenderer != null?dataRenderer:new SoftDataRenderer(context, values);
-        this.mAxesRenderer = axesArenderer != null?axesArenderer:new SoftAxesRenderer(context, values);
+        this.mSoftStrategy = softStrategy != null ? softStrategy : new LuckySoftStrategy(values.length);
+        this.mDataRenerer = dataRenderer != null ? dataRenderer : new SoftDataRenderer(context, values);
+        this.mAxesRenderer = axesArenderer != null ? axesArenderer : new SoftAxesRenderer(context, values);
         this.mDataRenerer.setSoftStrategy(mSoftStrategy);
         this.mAxesRenderer.setSoftStrategy(mSoftStrategy);
     }
 
-    public static LuckySoftRenderer instantiate(@NonNull Context context,@NonNull ECGPointValue[] values) {
-        return instantiate(context, values,null,null,null);
+    public static LuckySoftRenderer instantiate(@NonNull Context context, @NonNull ECGPointValue[] values) {
+        return instantiate(context, values, null, null, null);
     }
 
     public static LuckySoftRenderer instantiate(@NonNull Context context,
@@ -46,7 +46,7 @@ public class LuckySoftRenderer {
                                                 @Nullable SoftStrategy softStrategy,
                                                 @Nullable RealRenderer dataRenderer,
                                                 @Nullable RealRenderer axesArenderer) {
-        return new LuckySoftRenderer(context, values,softStrategy,dataRenderer,axesArenderer);
+        return new LuckySoftRenderer(context, values, softStrategy, dataRenderer, axesArenderer);
     }
 
     private void initSoft() {
@@ -59,7 +59,7 @@ public class LuckySoftRenderer {
 
     public LuckySoftRenderer setMaxDataValue(float maxDataValue) {
         if (!Float.isNaN(maxDataValue)) {
-            if (mSoftStrategy instanceof  LuckySoftStrategy){
+            if (mSoftStrategy instanceof LuckySoftStrategy) {
                 ((LuckySoftStrategy) mSoftStrategy).setMaxDataValueForMv(maxDataValue);
             }
         }
@@ -69,7 +69,7 @@ public class LuckySoftRenderer {
     /**
      * 开始绘制
      */
-    public Bitmap startRender(){
+    public Bitmap startRender() {
         this.initSoft();
         softwareCanvas.drawColor(Color.WHITE);
         mAxesRenderer.draw(softwareCanvas);

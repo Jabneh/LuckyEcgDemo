@@ -40,14 +40,14 @@ public class ChartGestureHelper {
 
     private int gestureMode = GESTURE_NONE;
 
-    ChartGestureHelper(ChartProvider provider){
+    ChartGestureHelper(ChartProvider provider) {
         this.chartProvider = provider;
         this.scrollPort = new Coordinateport();
         this.chartComputator = provider.getChartComputator();
         this.scroller = new OverScroller(provider.getContexter());
     }
 
-    public boolean prepareWithDownAction(){
+    public boolean prepareWithDownAction() {
         if (!scroller.isFinished()) {
             scroller.abortAnimation();
         }
@@ -56,13 +56,13 @@ public class ChartGestureHelper {
         return true;
     }
 
-    public ScrollResult scroll(float startX, float startY, float distanceX, float distanceY){
+    public ScrollResult scroll(float startX, float startY, float distanceX, float distanceY) {
         gestureMode = GESTURE_SCROLL;
         Scroller scroll = chartProvider.getScrollImpl();
-        if (scroll == null){
+        if (scroll == null) {
             return scrollResult;
         }
-        return scroll.scroll(startX,startY,distanceX,distanceY);
+        return scroll.scroll(startX, startY, distanceX, distanceY);
     }
 
 
@@ -74,10 +74,10 @@ public class ChartGestureHelper {
     }
 
     //长按
-    public void longPressed(MotionEvent e){
+    public void longPressed(MotionEvent e) {
         gestureMode = GESTURE_LONGPRESS;
         LongPress longPress = chartProvider.getLongpresser();
-        if (longPress != null){
+        if (longPress != null) {
             longPress.longPressed(e);
         }
     }
@@ -88,19 +88,19 @@ public class ChartGestureHelper {
     }
 
     //手势抬起
-    public void onUp(MotionEvent e){
-        switch (gestureMode){
+    public void onUp(MotionEvent e) {
+        switch (gestureMode) {
             case GESTURE_LONGPRESS:
                 LongPress longPress = chartProvider.getLongpresser();
-                if (longPress != null){
+                if (longPress != null) {
                     longPress.finish(e);
                 }
                 break;
         }
     }
 
-    public boolean computeScrollOffset(){
-        if (scroller.computeScrollOffset()){
+    public boolean computeScrollOffset() {
+        if (scroller.computeScrollOffset()) {
             final Coordinateport max = chartComputator.getMaxCoorport();
             chartComputator.computeScrollSurfaceSize(surfaceSizeBuffer);
             final float currXRange = max.left + max.width() * scroller.getCurrX() / surfaceSizeBuffer.x;

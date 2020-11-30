@@ -9,7 +9,7 @@ import com.seeker.luckychart.utils.ChartLogger;
  * @date 2018/10/23/023  13:01
  * @describe ecg心电图绘制策略
  */
-public class ECGRenderStrategyImpl implements ECGRenderStrategy{
+public class ECGRenderStrategyImpl implements ECGRenderStrategy {
 
     private static final int DEFAULT_CELLPIXEL = 10;//每个小格固定10像素
 
@@ -37,14 +37,14 @@ public class ECGRenderStrategyImpl implements ECGRenderStrategy{
 
     private float ecgportSpace = 30;
 
-    private float[] markTextStyle = {14,4};
+    private float[] markTextStyle = {14, 4};
 
     private boolean canLineBound = false;
 
-    private ECGRenderStrategyImpl(){
+    private ECGRenderStrategyImpl() {
     }
 
-    public static ECGRenderStrategy create(){
+    public static ECGRenderStrategy create() {
         return new ECGRenderStrategyImpl();
     }
 
@@ -60,9 +60,9 @@ public class ECGRenderStrategyImpl implements ECGRenderStrategy{
         }
         result[0] = this.measuredWith = (int) (xCellCounts * getCellWidth());
         result[1] = this.measuredHeight = (int) (getYCellCounts() * getCellWidth());
-        ChartLogger.d("onViewMeasured() called: xCellCounts = "+xCellCounts+",cellPixel = "+cellPixel
-                +",width = "+result[0]+",height = "+result[1]
-                +",measuredWithSize = "+measuredWithSize+",measuredHeightSize = "+measuredHeightSize);
+        ChartLogger.d("onViewMeasured() called: xCellCounts = " + xCellCounts + ",cellPixel = " + cellPixel
+                + ",width = " + result[0] + ",height = " + result[1]
+                + ",measuredWithSize = " + measuredWithSize + ",measuredHeightSize = " + measuredHeightSize);
     }
 
     @Override
@@ -133,18 +133,18 @@ public class ECGRenderStrategyImpl implements ECGRenderStrategy{
 
     @Override
     public boolean scale(int outerCellYCount) {
-        if (outerCellYCount < defaultYOuterCellCounts/2 || outerCellYCount > defaultYOuterCellCounts * 1.5){
+        if (outerCellYCount < defaultYOuterCellCounts / 2 || outerCellYCount > defaultYOuterCellCounts * 1.5) {
             return false;
         }
         this.yOuterCellCounts = outerCellYCount;
-        this.cellPixel = 1f * measuredHeight/getYCellCounts();
+        this.cellPixel = 1f * measuredHeight / getYCellCounts();
         this.xCellCounts = (int) (measuredWith / cellPixel);
         return true;
     }
 
     @Override
     public boolean gain(int yCellCountsPerMv) {
-        if (yCellCountsPerMv > TOTALCELLS_PERMV * 2 || yCellCountsPerMv < TOTALCELLS_PERMV/2){
+        if (yCellCountsPerMv > TOTALCELLS_PERMV * 2 || yCellCountsPerMv < TOTALCELLS_PERMV / 2) {
             return false;
         }
         this.yCellCountsPerMV = yCellCountsPerMv;
@@ -153,9 +153,10 @@ public class ECGRenderStrategyImpl implements ECGRenderStrategy{
 
     /**
      * 返回x轴最大小格子数量
+     *
      * @return
      */
-    private int defaultXMaxCellCounts(){
+    private int defaultXMaxCellCounts() {
         return DEFAULT_MAX_OUTERCELL_COUNT * getInnerCellCounts();
     }
 
@@ -181,12 +182,12 @@ public class ECGRenderStrategyImpl implements ECGRenderStrategy{
 
     @Override
     public void setMarkTextStyle(String style) {
-        if (!TextUtils.isEmpty(style)){
+        if (!TextUtils.isEmpty(style)) {
             String[] strings = style.split(",");
-            if (strings.length > 0){
+            if (strings.length > 0) {
                 markTextStyle[0] = Float.parseFloat(strings[0]);
             }
-            if (strings.length > 1){
+            if (strings.length > 1) {
                 markTextStyle[1] = Float.parseFloat(strings[1]);
             }
         }

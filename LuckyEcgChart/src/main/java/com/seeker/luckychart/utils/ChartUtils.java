@@ -45,23 +45,24 @@ public final class ChartUtils {
         return (int) (sp * scaledDensity + 0.5f);
     }
 
-    public static boolean copyof(@NonNull char[] src, @NonNull char[] dst){
-        System.arraycopy(src,0,dst,0,Math.min(src.length,dst.length));
+    public static boolean copyof(@NonNull char[] src, @NonNull char[] dst) {
+        System.arraycopy(src, 0, dst, 0, Math.min(src.length, dst.length));
         return true;
     }
 
-    public static float measureText(@NonNull char[] src, Paint paint){
-        return paint.measureText(src,0,src.length);
+    public static float measureText(@NonNull char[] src, Paint paint) {
+        return paint.measureText(src, 0, src.length);
     }
 
-    public static int getTextHeight(Paint paint, String text){
+    public static int getTextHeight(Paint paint, String text) {
         Rect rect = new Rect();
-        paint.getTextBounds(text, 0, text.length()-1, rect);
+        paint.getTextBounds(text, 0, text.length() - 1, rect);
         return rect.height();
     }
 
     /**
      * 绘制文字图片
+     *
      * @param chars
      * @param index
      * @param count
@@ -71,30 +72,30 @@ public final class ChartUtils {
      * @param paint
      * @return
      */
-    public static Bitmap drawBitmapText(@NonNull char[] chars, int index, int count,float degree, float px, float py,@NonNull Paint paint){
+    public static Bitmap drawBitmapText(@NonNull char[] chars, int index, int count, float degree, float px, float py, @NonNull Paint paint) {
         Paint.FontMetrics fontMetrics = paint.getFontMetrics();
-        RectF target = new RectF(0,0,paint.measureText(chars,index,count),
+        RectF target = new RectF(0, 0, paint.measureText(chars, index, count),
                 (float) Math.floor(fontMetrics.descent - fontMetrics.ascent));
-        int baseLine =  (int)((target.bottom + target.top - fontMetrics.bottom - fontMetrics.top) / 2.0f);
+        int baseLine = (int) ((target.bottom + target.top - fontMetrics.bottom - fontMetrics.top) / 2.0f);
         Bitmap textBmp = Bitmap.createBitmap((int) target.width(), (int) target.height(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(textBmp);
         canvas.save();
-        canvas.setDrawFilter(new PaintFlagsDrawFilter(0,Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG | Paint.DITHER_FLAG));
-        canvas.rotate(degree,px,py);
+        canvas.setDrawFilter(new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG | Paint.DITHER_FLAG));
+        canvas.rotate(degree, px, py);
         canvas.drawColor(Color.TRANSPARENT);
-        canvas.drawText(chars,index,count,0,baseLine,paint);
+        canvas.drawText(chars, index, count, 0, baseLine, paint);
         canvas.restore();
         return textBmp;
     }
 
-    public static Bitmap drawBitmapText(@NonNull char[] chars, int index, int count,@NonNull Paint paint){
-        return drawBitmapText(chars, index, count,0,0,0,paint);
+    public static Bitmap drawBitmapText(@NonNull char[] chars, int index, int count, @NonNull Paint paint) {
+        return drawBitmapText(chars, index, count, 0, 0, 0, paint);
     }
 
 
-    public static float applyDimension(int unit, float value){
+    public static float applyDimension(int unit, float value) {
         DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();
-        return TypedValue.applyDimension(unit,value,metrics);
+        return TypedValue.applyDimension(unit, value, metrics);
     }
 
 }

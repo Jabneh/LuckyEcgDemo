@@ -12,7 +12,7 @@ import com.seeker.luckychart.strategy.scroll.ScrollResult;
  * @date 2018/6/27/027  17:28
  * @describe 手势滑动实现类
  */
-public class ChartTouchHandler extends AbstractTouchHandler{
+public class ChartTouchHandler extends AbstractTouchHandler {
 
     private ChartGestureDetector gestureDetector;
 
@@ -20,24 +20,24 @@ public class ChartTouchHandler extends AbstractTouchHandler{
 
     private boolean canAnswerScroll = true;//单手指触摸屏幕可以响应滑动
 
-    public ChartTouchHandler(ChartProvider provider){
+    public ChartTouchHandler(ChartProvider provider) {
         super(provider);
-        this.gestureDetector = new ChartGestureDetector(provider.getContexter(),new ChartGestureListener());
-        this.scaleGestureDetector = new ScaleGestureDetector(provider.getContexter(),new ChartScaleGestureListener());
+        this.gestureDetector = new ChartGestureDetector(provider.getContexter(), new ChartGestureListener());
+        this.scaleGestureDetector = new ScaleGestureDetector(provider.getContexter(), new ChartScaleGestureListener());
     }
 
     @Override
-    public boolean handleTouchEvent(MotionEvent event,ViewParent viewParent) {
+    public boolean handleTouchEvent(MotionEvent event, ViewParent viewParent) {
         final int action = event.getAction() & MotionEvent.ACTION_MASK;
-        if (action == MotionEvent.ACTION_POINTER_DOWN){
+        if (action == MotionEvent.ACTION_POINTER_DOWN) {
             canAnswerScroll = false;
-        }else if (action == MotionEvent.ACTION_DOWN){
+        } else if (action == MotionEvent.ACTION_DOWN) {
             canAnswerScroll = true;
         }
         boolean needInvalidate = gestureDetector.onTouchEvent(event);
         needInvalidate = scaleGestureDetector.onTouchEvent(event) || needInvalidate;
-        if (scaleGestureDetector.isInProgress()){
-            allowParentInterceptTouchEvent(viewParent,true);
+        if (scaleGestureDetector.isInProgress()) {
+            allowParentInterceptTouchEvent(viewParent, true);
         }
         return needInvalidate;
     }
@@ -47,9 +47,10 @@ public class ChartTouchHandler extends AbstractTouchHandler{
         return chartGestureHelper.computeScrollOffset();
     }
 
-    private class ChartGestureListener extends ChartGestureDetector.ChartSimpleOnGestureListener{
+    private class ChartGestureListener extends ChartGestureDetector.ChartSimpleOnGestureListener {
 
-        ChartGestureListener(){}
+        ChartGestureListener() {
+        }
 
         @Override
         public boolean onDown(MotionEvent e) {
@@ -82,7 +83,7 @@ public class ChartTouchHandler extends AbstractTouchHandler{
         }
     }
 
-    private class ChartScaleGestureListener extends ScaleGestureDetector.SimpleOnScaleGestureListener{
+    private class ChartScaleGestureListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
         @Override
         public boolean onScale(ScaleGestureDetector detector) {
             return chartGestureHelper.scale(detector);

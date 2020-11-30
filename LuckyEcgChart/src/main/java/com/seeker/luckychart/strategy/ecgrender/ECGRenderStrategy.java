@@ -21,7 +21,7 @@ public interface ECGRenderStrategy {
 
     float OUTER_STROKE_WIDTH = 2f;
 
-    void onViewMeasured(int measuredWithSize, int measuredHeightSize,int[] result);
+    void onViewMeasured(int measuredWithSize, int measuredHeightSize, int[] result);
 
     int getXCellCounts();//获取X轴方向小格子总数
 
@@ -51,12 +51,14 @@ public interface ECGRenderStrategy {
 
     /**
      * 缩放功能，以Y轴大格子数目为准，X轴从设
+     *
      * @param outerCellYCount 缩放后Y轴大格子数目
      */
     boolean scale(int outerCellYCount);
 
     /**
      * 增益功能，以Y轴为主
+     *
      * @param yCellCountsPerMv 设置的没mv包含几个小格子
      */
     boolean gain(int yCellCountsPerMv);

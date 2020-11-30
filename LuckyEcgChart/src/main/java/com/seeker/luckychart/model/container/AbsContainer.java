@@ -3,15 +3,13 @@ package com.seeker.luckychart.model.container;
 import android.graphics.Color;
 import android.support.annotation.CallSuper;
 
-import java.util.Arrays;
-
 /**
  * @author Seeker
  * @date 2018/6/7/007  11:43
  * @describe 基础数据容器
  */
 
-public abstract class AbsContainer<Value>{
+public abstract class AbsContainer<Value> {
 
     private static final int DEFAULT_POINT_COLOR = Color.BLACK;
 
@@ -33,11 +31,11 @@ public abstract class AbsContainer<Value>{
 
     private float lineStrokeWidth = DEFAULT_LINE_STROKEWIDTH;
 
-    AbsContainer(){
+    AbsContainer() {
 
     }
 
-    AbsContainer(Value[] values ){
+    AbsContainer(Value[] values) {
         this.values = values;
     }
 
@@ -82,15 +80,16 @@ public abstract class AbsContainer<Value>{
     }
 
     @CallSuper
-    public void clear(){
+    public void clear() {
         values = null;
     }
 
     /**
      * 更新新数据
+     *
      * @param newValues
      */
-    public void updateNewValues(Value[] newValues){
+    public void updateNewValues(Value[] newValues) {
         // TODO: 2018/10/24/024,do what you want to do
     }
 

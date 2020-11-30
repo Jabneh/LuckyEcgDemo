@@ -11,7 +11,7 @@ import android.view.MotionEvent;
  * @describe TODO
  */
 
-public class ChartGestureDetector extends GestureDetector{
+public class ChartGestureDetector extends GestureDetector {
 
     private OnGestureUpListener upListener;
 
@@ -33,7 +33,7 @@ public class ChartGestureDetector extends GestureDetector{
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
         boolean result = super.onTouchEvent(ev);
-        if (upListener != null && ev.getAction() == MotionEvent.ACTION_UP){
+        if (upListener != null && ev.getAction() == MotionEvent.ACTION_UP) {
             upListener.onActionUp(ev);
         }
         return result;
@@ -42,11 +42,11 @@ public class ChartGestureDetector extends GestureDetector{
     /**
      * up事件没有回调，现在添加一个监听回调事件
      */
-    public interface OnGestureUpListener{
+    public interface OnGestureUpListener {
         void onActionUp(MotionEvent event);
     }
 
-    public static class ChartSimpleOnGestureListener extends SimpleOnGestureListener implements OnGestureUpListener{
+    public static class ChartSimpleOnGestureListener extends SimpleOnGestureListener implements OnGestureUpListener {
 
         private boolean isFling = false;
 
@@ -64,13 +64,13 @@ public class ChartGestureDetector extends GestureDetector{
 
         @Override
         public void onActionUp(MotionEvent event) {
-            if (!isFling){
+            if (!isFling) {
                 onUpWithoutFling(event);
             }
         }
 
         //只有当不是fling的时候才回调
-        public void onUpWithoutFling(MotionEvent event){
+        public void onUpWithoutFling(MotionEvent event) {
 
         }
 

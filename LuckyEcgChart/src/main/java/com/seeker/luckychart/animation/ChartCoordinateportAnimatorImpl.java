@@ -12,7 +12,7 @@ import com.seeker.luckychart.provider.ChartProvider;
  */
 
 public class ChartCoordinateportAnimatorImpl
-        implements ChartCoordinateportAnimator,ValueAnimator.AnimatorUpdateListener,Animator.AnimatorListener{
+        implements ChartCoordinateportAnimator, ValueAnimator.AnimatorUpdateListener, Animator.AnimatorListener {
 
     private final ChartProvider chartProvider;
 
@@ -23,7 +23,7 @@ public class ChartCoordinateportAnimatorImpl
     private Coordinateport newport = new Coordinateport();
     private ChartAnimationListener animationListener;
 
-    private ChartCoordinateportAnimatorImpl(ChartProvider chartProvider){
+    private ChartCoordinateportAnimatorImpl(ChartProvider chartProvider) {
         this.chartProvider = chartProvider;
         animator = ValueAnimator.ofFloat(0.0f, 1.0f);
         animator.addListener(this);
@@ -31,13 +31,13 @@ public class ChartCoordinateportAnimatorImpl
         animator.setDuration(FAST_ANIMATION_DURATION);
     }
 
-    public static ChartCoordinateportAnimatorImpl create(ChartProvider chartProvider){
+    public static ChartCoordinateportAnimatorImpl create(ChartProvider chartProvider) {
         return new ChartCoordinateportAnimatorImpl(chartProvider);
     }
 
     @Override
     public void onAnimationStart(Animator animation) {
-        if (null != animationListener){
+        if (null != animationListener) {
             animationListener.onAnimationStarted();
         }
     }
@@ -45,7 +45,7 @@ public class ChartCoordinateportAnimatorImpl
     @Override
     public void onAnimationEnd(Animator animation) {
         chartProvider.setChartVisibleCoordinateport(targetport);
-        if (null != animationListener){
+        if (null != animationListener) {
             animationListener.onAnimationFinished();
         }
     }

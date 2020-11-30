@@ -31,32 +31,32 @@ public abstract class AbstractTouchHandler {
 
     private int mTouchSlop;
 
-    public AbstractTouchHandler(ChartProvider provider){
+    public AbstractTouchHandler(ChartProvider provider) {
         final ViewConfiguration configuration = ViewConfiguration.get(provider.getContexter());
         this.mTouchSlop = configuration.getScaledTouchSlop();
         this.chartGestureHelper = new ChartGestureHelper(provider);
     }
 
-    public void dispatchTouchEvent(MotionEvent event,ViewParent viewParent){
+    public void dispatchTouchEvent(MotionEvent event, ViewParent viewParent) {
         final float touchX = event.getX();
         final float touchY = event.getY();
-        switch (event.getActionMasked()){
+        switch (event.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:
                 scrollType = SCROLL_PREPARE;
                 mLastTouchX = touchX;
                 mLastTouchY = touchY;
                 break;
             case MotionEvent.ACTION_MOVE:
-                if (SCROLL_PREPARE == scrollType){
+                if (SCROLL_PREPARE == scrollType) {
                     float deltaX = Math.abs(touchX - mLastTouchX);
                     float deltaY = Math.abs(touchY - mLastTouchY);
 
-                    if (deltaX > deltaY && Math.abs(deltaX) > mTouchSlop){
+                    if (deltaX > deltaY && Math.abs(deltaX) > mTouchSlop) {
                         scrollType = SCROLL_CHILD;
-                        allowParentInterceptTouchEvent(viewParent,true);
-                    }else if(deltaX < deltaY && Math.abs(deltaX) > mTouchSlop){
+                        allowParentInterceptTouchEvent(viewParent, true);
+                    } else if (deltaX < deltaY && Math.abs(deltaX) > mTouchSlop) {
                         scrollType = SCROLL_PARENT;
-                        allowParentInterceptTouchEvent(viewParent,false);
+                        allowParentInterceptTouchEvent(viewParent, false);
                     }
                 }
                 break;
@@ -64,22 +64,22 @@ public abstract class AbstractTouchHandler {
 
                 break;
             default:
-                allowParentInterceptTouchEvent(viewParent,false);
+                allowParentInterceptTouchEvent(viewParent, false);
                 break;
         }
     }
 
-    public boolean canScroll(){
+    public boolean canScroll() {
         return SCROLL_PARENT != scrollType && SCROLL_PREPARE != scrollType;
     }
 
-    protected void allowParentInterceptTouchEvent(ViewParent viewParent,boolean allow){
-        if (null != viewParent){
+    protected void allowParentInterceptTouchEvent(ViewParent viewParent, boolean allow) {
+        if (null != viewParent) {
             viewParent.requestDisallowInterceptTouchEvent(allow);
         }
     }
 
-    public abstract boolean handleTouchEvent(MotionEvent event,ViewParent viewParent);
+    public abstract boolean handleTouchEvent(MotionEvent event, ViewParent viewParent);
 
     public abstract boolean computeScroll();
 

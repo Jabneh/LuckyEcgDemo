@@ -33,7 +33,7 @@ public class CoorValue {
         this.rawValue = rawValue;
     }
 
-    public char[] getLabelAsChar(){
+    public char[] getLabelAsChar() {
         return label.toCharArray();
     }
 

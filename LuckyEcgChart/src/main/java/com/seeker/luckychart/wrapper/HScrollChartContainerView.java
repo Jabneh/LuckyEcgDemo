@@ -15,7 +15,7 @@ import com.seeker.luckychart.provider.ChartProvider;
  * @date 2018/6/29/029  11:07
  * @describe 横向滚动的图表管理类
  */
-public class HScrollChartContainerView extends HorizontalScrollView{
+public class HScrollChartContainerView extends HorizontalScrollView {
 
     private static final String TAG = "HScrollChartContainerVi";
 
@@ -26,11 +26,11 @@ public class HScrollChartContainerView extends HorizontalScrollView{
     private ChartProvider provider;
 
     public HScrollChartContainerView(Context context) {
-        this(context,null);
+        this(context, null);
     }
 
     public HScrollChartContainerView(Context context, AttributeSet attrs) {
-        this(context, attrs,0);
+        this(context, attrs, 0);
     }
 
     public HScrollChartContainerView(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -45,19 +45,19 @@ public class HScrollChartContainerView extends HorizontalScrollView{
         transform();
     }
 
-    private void transform(){
+    private void transform() {
 
         childContainer = new FrameLayout(getContext());
         childContainer.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.MATCH_PARENT));
 
-        if (getChildCount() == 0){
+        if (getChildCount() == 0) {
             throw new IllegalStateException("HorizontalScrollView hasn't add one direct child.");
         }
 
         View child = getChildAt(0);
 
-        if (!(child instanceof ChartProvider)){
+        if (!(child instanceof ChartProvider)) {
             throw new IllegalStateException("direct child is't instanceof ChartProvider.");
         }
 

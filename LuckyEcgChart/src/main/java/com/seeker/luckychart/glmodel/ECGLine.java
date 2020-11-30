@@ -25,11 +25,11 @@ public class ECGLine extends Object3D {
         setDrawingMode(drawingMode);
     }
 
-    public static ECGLine create(){
+    public static ECGLine create() {
         return new ECGLine(GLES31.GL_LINE_STRIP);
     }
 
-    public static ECGLine create(int drawingMode){
+    public static ECGLine create(int drawingMode) {
         return new ECGLine(drawingMode);
     }
 

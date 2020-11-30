@@ -24,7 +24,7 @@ public abstract class RealRenderer {
 
     protected float mScaleDensity;
 
-    public RealRenderer(@NonNull Context context, @NonNull ECGPointValue[] values){
+    public RealRenderer(@NonNull Context context, @NonNull ECGPointValue[] values) {
         this.mContext = context;
         this.mEcgData = values;
         final DisplayMetrics dm = context.getResources().getDisplayMetrics();
@@ -32,7 +32,7 @@ public abstract class RealRenderer {
         this.mScaleDensity = dm.scaledDensity;
     }
 
-    void setSoftStrategy(@NonNull SoftStrategy softStrategy){
+    void setSoftStrategy(@NonNull SoftStrategy softStrategy) {
         this.mSoftStrategy = softStrategy;
     }
 

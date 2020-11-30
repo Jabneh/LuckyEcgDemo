@@ -11,26 +11,26 @@ import com.seeker.luckychart.provider.ChartProvider;
  * @date 2018/11/2/002  11:37
  * @describe 心电图双击实现
  */
-public class ECGDoubleTabImpl implements DoubleTap{
+public class ECGDoubleTabImpl implements DoubleTap {
 
     private ChartProvider chartProvider;
 
-    private ECGDoubleTabImpl(ChartProvider provider){
+    private ECGDoubleTabImpl(ChartProvider provider) {
         this.chartProvider = provider;
     }
 
-    public static ECGDoubleTabImpl create(ChartProvider provider){
+    public static ECGDoubleTabImpl create(ChartProvider provider) {
         return new ECGDoubleTabImpl(provider);
     }
 
     @Override
     public boolean doubleTap(MotionEvent e) {
         View view = chartProvider.getSelf();
-        if (view instanceof ECGChartView){
+        if (view instanceof ECGChartView) {
             ECGChartView chartView = (ECGChartView) view;
-            if (e.getY() <= chartProvider.getChartComputator().getChartHeight()/2) {
+            if (e.getY() <= chartProvider.getChartComputator().getChartHeight() / 2) {
                 chartView.scaleUp();
-            }else {
+            } else {
                 chartView.scaleDown();
             }
         }

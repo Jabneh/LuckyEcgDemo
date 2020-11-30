@@ -20,12 +20,12 @@ public class PointValue implements IValueChanged {
     protected float diffX;
     protected float diffY;
 
-    public PointValue(){
+    public PointValue() {
         coorY = Float.NaN;
     }
 
     public PointValue(float coorX, float coorY) {
-        set(coorX,coorY);
+        set(coorX, coorY);
     }
 
     public float getCoorX() {
@@ -44,7 +44,7 @@ public class PointValue implements IValueChanged {
         this.coorY = coorY;
     }
 
-    private PointValue set(float x,float y){
+    private PointValue set(float x, float y) {
         this.coorX = x;
         this.coorY = y;
         this.originX = x;
@@ -59,7 +59,7 @@ public class PointValue implements IValueChanged {
     }
 
     @CallSuper
-    public void init(){
+    public void init() {
         coorX = 0;
         coorY = 0;
         originX = 0;
@@ -91,7 +91,7 @@ public class PointValue implements IValueChanged {
                 '}';
     }
 
-    public void copyFrom(PointValue value){
+    public void copyFrom(PointValue value) {
         this.coorX = value.coorX;
         this.coorY = value.coorY;
         this.originX = value.originX;

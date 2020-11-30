@@ -22,30 +22,30 @@ public abstract class Transformer {
      */
     private Rect dataContentRect = new Rect();
 
-    public Transformer(){
+    public Transformer() {
 
     }
 
-    public final void setVisibleCoorport(float left,float top,float right,float bottom){
+    public final void setVisibleCoorport(float left, float top, float right, float bottom) {
         this.visibleCoorport.set(left, top, right, bottom);
     }
 
-    public final void setDataContentRect(int left, int top, int right, int bottom){
-        this.dataContentRect.set(left,top,right,bottom);
+    public final void setDataContentRect(int left, int top, int right, int bottom) {
+        this.dataContentRect.set(left, top, right, bottom);
     }
 
-    public float computeRawX(int index){
-        float pixelOffset = (index - visibleCoorport.left) *(dataContentRect.width() / visibleCoorport.width());
+    public float computeRawX(int index) {
+        float pixelOffset = (index - visibleCoorport.left) * (dataContentRect.width() / visibleCoorport.width());
         return dataContentRect.left + pixelOffset;
     }
 
-    public float computeRawY(float value){
-        float pixelOffset = (value - visibleCoorport.bottom)*(dataContentRect.height() / visibleCoorport.height());
+    public float computeRawY(float value) {
+        float pixelOffset = (value - visibleCoorport.bottom) * (dataContentRect.height() / visibleCoorport.height());
         return dataContentRect.bottom - pixelOffset;
     }
 
-    public boolean needDraw(float currentY,float nextY){
-        if (currentY == nextY){
+    public boolean needDraw(float currentY, float nextY) {
+        if (currentY == nextY) {
             return !(currentY == dataContentRect.top) && !(currentY == dataContentRect.bottom);
         }
         return true;
