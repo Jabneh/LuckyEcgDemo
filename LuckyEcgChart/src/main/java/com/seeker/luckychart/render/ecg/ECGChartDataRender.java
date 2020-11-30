@@ -6,9 +6,8 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.PorterDuff;
-import android.opengl.GLES10;
-import android.opengl.GLES20;
 import android.util.TypedValue;
+
 import com.seeker.luckychart.charts.ECGChartView;
 import com.seeker.luckychart.glmodel.ECGLine3D;
 import com.seeker.luckychart.model.Coordinateport;
@@ -18,6 +17,7 @@ import com.seeker.luckychart.model.container.ECGPointContainer;
 import com.seeker.luckychart.render.AbstractChartDataRenderer;
 import com.seeker.luckychart.strategy.ecgrender.ECGRenderStrategy;
 import com.seeker.luckychart.utils.ChartUtils;
+
 import org.rajawali3d.Object3D;
 import org.rajawali3d.cameras.Camera2D;
 import org.rajawali3d.materials.Material;
@@ -25,6 +25,7 @@ import org.rajawali3d.materials.textures.ATexture;
 import org.rajawali3d.materials.textures.Texture;
 import org.rajawali3d.primitives.Plane;
 import org.rajawali3d.scene.Scene;
+
 import java.util.List;
 
 /**

@@ -1,14 +1,13 @@
 package com.seeker.luckychart.render.ecg;
 
 import android.graphics.PointF;
-import android.opengl.GLES20;
+import android.opengl.GLES31;
 
 import com.seeker.luckychart.charts.ECGChartView;
 import com.seeker.luckychart.computator.ChartComputator;
 import com.seeker.luckychart.glmodel.ECGLine;
 import com.seeker.luckychart.render.inters.LuckyAxesRenderer;
 import com.seeker.luckychart.strategy.ecgrender.ECGRenderStrategy;
-import com.seeker.luckychart.utils.ChartLogger;
 
 import org.rajawali3d.materials.Material;
 import org.rajawali3d.math.vector.Vector3;
@@ -25,27 +24,27 @@ public class ECGChartAxesRenderer implements LuckyAxesRenderer {
 
     private ECGChartView chartView;
 
-    private ECGLine outLine,innerLine;
+    private ECGLine outLine, innerLine;
 
-    private Stack<Vector3> outVectors,innerVectors;
+    private Stack<Vector3> outVectors, innerVectors;
 
-    private ECGChartAxesRenderer(ECGChartView chartView){
+    private ECGChartAxesRenderer(ECGChartView chartView) {
         this.chartView = chartView;
     }
 
-    public static ECGChartAxesRenderer create(ECGChartView chartView){
+    public static ECGChartAxesRenderer create(ECGChartView chartView) {
         return new ECGChartAxesRenderer(chartView);
     }
 
     @Override
     public void initScene() {
-        outLine = ECGLine.create(GLES20.GL_LINES);
+        outLine = ECGLine.create(GLES31.GL_LINES);
         outLine.setLineThickness(chartView.getECGRenderStrategy().getOuterThinkLineWidth());
         outLine.setColor(chartView.getECGRenderStrategy().getOuterColor());
         outLine.setMaterial(new Material());
         outVectors = new Stack<>();
 
-        innerLine = ECGLine.create(GLES20.GL_LINES);
+        innerLine = ECGLine.create(GLES31.GL_LINES);
         innerLine.setLineThickness(chartView.getECGRenderStrategy().getInnerThinkLineWidth());
         innerLine.setColor(chartView.getECGRenderStrategy().getInnerColor());
         innerLine.setMaterial(new Material());
@@ -58,10 +57,10 @@ public class ECGChartAxesRenderer implements LuckyAxesRenderer {
         int count = renderStrategy.getEcgLineCount();
         float space = renderStrategy.getEcgPortSpace();
         float singleHeight = chartView.getChartComputator().getSingleEcgChartHeight();
-        for (int i = 0;i < count;i++){
-            float offset = (space+singleHeight)*i;
+        for (int i = 0; i < count; i++) {
+            float offset = (space + singleHeight) * i;
             drawHCellLine(offset);
-            drawVCellLine(offset,renderStrategy.getYCellCounts()*renderStrategy.getCellWidth()+offset);
+            drawVCellLine(offset, renderStrategy.getYCellCounts() * renderStrategy.getCellWidth() + offset);
         }
         outLine.setPoints(outVectors);
         innerLine.setPoints(innerVectors);
@@ -72,38 +71,38 @@ public class ECGChartAxesRenderer implements LuckyAxesRenderer {
     /**
      * 绘制水平网格线
      */
-    private void drawHCellLine(float yOffset){
+    private void drawHCellLine(float yOffset) {
         ECGRenderStrategy renderStrategy = chartView.getECGRenderStrategy();
         int vCellCounts = renderStrategy.getYCellCounts();
         int innerCellCounts = renderStrategy.getInnerCellCounts();
         float cellWidth = renderStrategy.getCellWidth();
         ChartComputator chartComputator = chartView.getChartComputator();
-        float startX = 0,startY,
-                stopX = chartComputator.getChartContentRect().width(),stopY;
-        for (int i = 0; i < vCellCounts+1;++i){
-            startY = stopY = i * cellWidth+yOffset;
-            if (i == 0){
-                startY = stopY = startY + renderStrategy.getOuterThinkLineWidth()/2;
-                PointF pointF = chartComputator.screenToCartesian(startX,startY);
-                outVectors.add(new Vector3(pointF.x,pointF.y,0));
-                pointF = chartComputator.screenToCartesian(stopX,stopY);
-                outVectors.add(new Vector3(pointF.x,pointF.y,0));
-            }else if (i == vCellCounts){
-                startY = stopY = startY - renderStrategy.getOuterThinkLineWidth()/2;
-                PointF pointF = chartComputator.screenToCartesian(startX,startY);
-                outVectors.add(new Vector3(pointF.x,pointF.y,0));
-                pointF = chartComputator.screenToCartesian(stopX,stopY);
-                outVectors.add(new Vector3(pointF.x,pointF.y,0));
-            }else if (i % innerCellCounts == 0){
-                PointF pointF = chartComputator.screenToCartesian(startX,startY);
-                outVectors.add(new Vector3(pointF.x,pointF.y,0));
-                pointF = chartComputator.screenToCartesian(stopX,stopY);
-                outVectors.add(new Vector3(pointF.x,pointF.y,0));
-            }else {
-                PointF pointF = chartComputator.screenToCartesian(startX,startY);
-                innerVectors.add(new Vector3(pointF.x,pointF.y,0));
-                pointF = chartComputator.screenToCartesian(stopX,stopY);
-                innerVectors.add(new Vector3(pointF.x,pointF.y,0));
+        float startX = 0, startY,
+                stopX = chartComputator.getChartContentRect().width(), stopY;
+        for (int i = 0; i < vCellCounts + 1; ++i) {
+            startY = stopY = i * cellWidth + yOffset;
+            if (i == 0) {
+                startY = stopY = startY + renderStrategy.getOuterThinkLineWidth() / 2;
+                PointF pointF = chartComputator.screenToCartesian(startX, startY);
+                outVectors.add(new Vector3(pointF.x, pointF.y, 0));
+                pointF = chartComputator.screenToCartesian(stopX, stopY);
+                outVectors.add(new Vector3(pointF.x, pointF.y, 0));
+            } else if (i == vCellCounts) {
+                startY = stopY = startY - renderStrategy.getOuterThinkLineWidth() / 2;
+                PointF pointF = chartComputator.screenToCartesian(startX, startY);
+                outVectors.add(new Vector3(pointF.x, pointF.y, 0));
+                pointF = chartComputator.screenToCartesian(stopX, stopY);
+                outVectors.add(new Vector3(pointF.x, pointF.y, 0));
+            } else if (i % innerCellCounts == 0) {
+                PointF pointF = chartComputator.screenToCartesian(startX, startY);
+                outVectors.add(new Vector3(pointF.x, pointF.y, 0));
+                pointF = chartComputator.screenToCartesian(stopX, stopY);
+                outVectors.add(new Vector3(pointF.x, pointF.y, 0));
+            } else {
+                PointF pointF = chartComputator.screenToCartesian(startX, startY);
+                innerVectors.add(new Vector3(pointF.x, pointF.y, 0));
+                pointF = chartComputator.screenToCartesian(stopX, stopY);
+                innerVectors.add(new Vector3(pointF.x, pointF.y, 0));
             }
         }
     }
@@ -111,34 +110,34 @@ public class ECGChartAxesRenderer implements LuckyAxesRenderer {
     /**
      * 绘制竖直网格线
      */
-    private void drawVCellLine(float startY,float stopY){
+    private void drawVCellLine(float startY, float stopY) {
         ECGRenderStrategy renderStrategy = chartView.getECGRenderStrategy();
         int hCellCounts = renderStrategy.getXCellCounts();
         int innerCellCounts = renderStrategy.getInnerCellCounts();
         float cellWidth = renderStrategy.getCellWidth();
         ChartComputator chartComputator = chartView.getChartComputator();
-        float startX,stopX;
-        for (int i = 0; i < hCellCounts+1;++i){
+        float startX, stopX;
+        for (int i = 0; i < hCellCounts + 1; ++i) {
             startX = stopX = i * cellWidth;
-            if (i == 0){
-                startX = stopX = startX + renderStrategy.getOuterThinkLineWidth()/2;
-                PointF pointF = chartComputator.screenToCartesian(startX,startY);
-                outVectors.add(new Vector3(pointF.x,pointF.y,0));
-                pointF = chartComputator.screenToCartesian(stopX,stopY);
-                outVectors.add(new Vector3(pointF.x,pointF.y,0));
-            }else if (i % innerCellCounts == 0){
-                if (i == hCellCounts){
-                    startX = stopX = startX - renderStrategy.getOuterThinkLineWidth()/2;
+            if (i == 0) {
+                startX = stopX = startX + renderStrategy.getOuterThinkLineWidth() / 2;
+                PointF pointF = chartComputator.screenToCartesian(startX, startY);
+                outVectors.add(new Vector3(pointF.x, pointF.y, 0));
+                pointF = chartComputator.screenToCartesian(stopX, stopY);
+                outVectors.add(new Vector3(pointF.x, pointF.y, 0));
+            } else if (i % innerCellCounts == 0) {
+                if (i == hCellCounts) {
+                    startX = stopX = startX - renderStrategy.getOuterThinkLineWidth() / 2;
                 }
-                PointF pointF = chartComputator.screenToCartesian(startX,startY);
-                outVectors.add(new Vector3(pointF.x,pointF.y,0));
-                pointF = chartComputator.screenToCartesian(stopX,stopY);
-                outVectors.add(new Vector3(pointF.x,pointF.y,0));
-            }else {
-                PointF pointF = chartComputator.screenToCartesian(startX,startY);
-                innerVectors.add(new Vector3(pointF.x,pointF.y,0));
-                pointF = chartComputator.screenToCartesian(stopX,stopY);
-                innerVectors.add(new Vector3(pointF.x,pointF.y,0));
+                PointF pointF = chartComputator.screenToCartesian(startX, startY);
+                outVectors.add(new Vector3(pointF.x, pointF.y, 0));
+                pointF = chartComputator.screenToCartesian(stopX, stopY);
+                outVectors.add(new Vector3(pointF.x, pointF.y, 0));
+            } else {
+                PointF pointF = chartComputator.screenToCartesian(startX, startY);
+                innerVectors.add(new Vector3(pointF.x, pointF.y, 0));
+                pointF = chartComputator.screenToCartesian(stopX, stopY);
+                innerVectors.add(new Vector3(pointF.x, pointF.y, 0));
             }
         }
     }
@@ -167,7 +166,7 @@ public class ECGChartAxesRenderer implements LuckyAxesRenderer {
 
     }
 
-    private void destroyChild(){
+    private void destroyChild() {
         Scene scene = chartView.getChartGlRenderer().getCurrentScene();
         outVectors.clear();
         innerVectors.clear();

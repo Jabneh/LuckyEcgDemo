@@ -1,7 +1,7 @@
 package com.seeker.luckychart.render;
 
 import android.graphics.PointF;
-import android.opengl.GLES20;
+import android.opengl.GLES31;
 
 import com.seeker.luckychart.model.Coordinateport;
 import com.seeker.luckychart.model.PointValue;
@@ -72,7 +72,7 @@ public class ScatterChartDataRenderer extends AbstractChartDataRenderer<ScatterC
             }
         }
         Line3D whirl = new Line3D(points,radius,color);
-        whirl.setDrawingMode(GLES20.GL_POINTS);
+        whirl.setDrawingMode(GLES31.GL_POINTS);
         Material material = new Material();
         whirl.setMaterial(material);
         chartComputator.getChartRenderer().getCurrentScene().addChild(whirl);

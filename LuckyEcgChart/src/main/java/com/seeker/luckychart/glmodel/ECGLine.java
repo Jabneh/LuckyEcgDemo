@@ -1,7 +1,7 @@
 package com.seeker.luckychart.glmodel;
 
 import android.graphics.Color;
-import android.opengl.GLES20;
+import android.opengl.GLES31;
 
 import org.rajawali3d.Object3D;
 import org.rajawali3d.math.vector.Vector3;
@@ -26,7 +26,7 @@ public class ECGLine extends Object3D {
     }
 
     public static ECGLine create(){
-        return new ECGLine(GLES20.GL_LINE_STRIP);
+        return new ECGLine(GLES31.GL_LINE_STRIP);
     }
 
     public static ECGLine create(int drawingMode){
@@ -73,6 +73,6 @@ public class ECGLine extends Object3D {
     @Override
     protected void preRender() {
         super.preRender();
-        GLES20.glLineWidth(mLineThickness);
+        GLES31.glLineWidth(mLineThickness);
     }
 }

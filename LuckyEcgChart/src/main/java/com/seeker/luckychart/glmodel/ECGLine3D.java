@@ -1,12 +1,14 @@
 package com.seeker.luckychart.glmodel;
 
 import android.graphics.Color;
-import android.opengl.GLES20;
+import android.opengl.GLES31;
 import android.util.SparseArray;
+
 import org.rajawali3d.BufferInfo;
 import org.rajawali3d.Object3D;
 import org.rajawali3d.materials.Material;
 import org.rajawali3d.materials.MaterialManager;
+
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
@@ -32,7 +34,7 @@ public class ECGLine3D extends Object3D{
     public ECGLine3D(int numPoints){
         this.numPoints = numPoints;
 
-        setDrawingMode(GLES20.GL_LINE_STRIP);
+        setDrawingMode(GLES31.GL_LINE_STRIP);
         isContainer(false);
         setDoubleSided(true);
         setTransparent(true);
@@ -64,9 +66,9 @@ public class ECGLine3D extends Object3D{
         mIndexBufferInfo = getGeometry().getIndexBufferInfo();
         mIndexBuffer = getGeometry().getIndices();
 
-        getGeometry().changeBufferUsage(mDataVertexBufferInfo,GLES20.GL_DYNAMIC_DRAW);
-        getGeometry().changeBufferUsage(mColorVertexBufferInfo,GLES20.GL_DYNAMIC_DRAW);
-        getGeometry().changeBufferUsage(mIndexBufferInfo,GLES20.GL_STATIC_DRAW);
+        getGeometry().changeBufferUsage(mDataVertexBufferInfo, GLES31.GL_DYNAMIC_DRAW);
+        getGeometry().changeBufferUsage(mColorVertexBufferInfo, GLES31.GL_DYNAMIC_DRAW);
+        getGeometry().changeBufferUsage(mIndexBufferInfo, GLES31.GL_STATIC_DRAW);
     }
 
     public void addVertexToBuffer(float x,float y,int color,int index) {
@@ -134,6 +136,6 @@ public class ECGLine3D extends Object3D{
     @Override
     protected void preRender() {
         super.preRender();
-        GLES20.glLineWidth(mLineThickness);
+        GLES31.glLineWidth(mLineThickness);
     }
 }
